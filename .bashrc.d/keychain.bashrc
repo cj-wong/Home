@@ -1,4 +1,5 @@
-# From: https://www.funtoo.org/Keychain
+#!/usr/bin/env bash
+# Companion script for: https://www.funtoo.org/Keychain
 
 command -v keychain
 if [[ $? != 0 ]]; then

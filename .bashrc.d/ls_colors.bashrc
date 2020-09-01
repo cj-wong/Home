@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Companion script for: https://github.com/trapd00r/LS_COLORS
 
 URL="git://github.com/trapd00r/LS_COLORS.git"

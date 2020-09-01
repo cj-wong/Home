@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 chroot='${debian_chroot:+($debian_chroot)}'
 green='\[\033[01;32m\]'
 blue='\[\033[01;34m\]'
