@@ -5,14 +5,14 @@
 INJECT_BASHRCD=$(cat <<END
 .bashrc.d functionality was not detected in your .bashrc file. If injected,
 your old .bashrc will be saved to a temporary file.
-Do you want to inject this? [yN]
+Do you want to inject this? [yN] 
 END
 )
 
 TEXT=$(cat <<END
 if [ -d ~/.bashrc.d ]; then
     for file in ~/.bashrc.d/*.bashrc; do
-        . "$file"
+        . "\$file"
     done
 fi
 END
@@ -24,9 +24,11 @@ grep -z "$TEXT" ~/.bashrc 2&> /dev/null
 if [[ $? != 0 ]]; then
     read -p "$INJECT_BASHRCD" prompt
     if [[ $prompt =~ ^[yY] ]]; then
-        OLD=$(mktemp -p ~)
-        cp ~/.bashrc "$OLD"
-        echo "Saved your old .bashrc to ${OLD}"
+        type -t copy_tmp 2&> /dev/null
+        if [[ $? != 0 ]]; then
+            . "$(dirname $0)/.bashrc.d/functions.bashrc"
+        fi
+        copy_tmp ~/.bashrc
         echo "$TEXT" >>  ~/.bashrc
         echo "Injected .bashrc.d into your .bashrc file. Restart shell to use."
     else
