@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Companion script for: https://www.funtoo.org/Keychain
 
-command -v keychain
+command -v keychain 2&> /dev/null
 if [[ $? != 0 ]]; then
     echo "keychain is not installed. Aborting script."
     exit 1
