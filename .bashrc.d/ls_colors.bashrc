@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
+#
 # Companion script for: https://github.com/trapd00r/LS_COLORS
+# Sets dircolors for the terminal by using an external repo. Clones the repo
+# if the files (repo) aren't locally found and given consent.
 
-URL="git://github.com/trapd00r/LS_COLORS.git"
+GIT_URL="git://github.com/trapd00r/LS_COLORS.git"
 ALREADY_EXISTS="LS_COLORS already exists. Do you want to delete it? [yN]"
 
 # If LS_COLORS wasn't installed, try installing it.
@@ -18,7 +21,7 @@ if [ -z "$lscolors_data_dir" ]; then
             exit 1
         fi
     fi
-    git clone "$URL" && cd LS_COLORS && bash install.sh
+    git clone "$GIT_URL" && cd LS_COLORS && bash install.sh
 fi
 
 file="$lscolors_data_dir/lscolors.sh"
