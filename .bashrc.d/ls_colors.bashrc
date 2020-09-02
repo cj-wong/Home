@@ -6,26 +6,23 @@
 
 GIT_URL="git://github.com/trapd00r/LS_COLORS.git"
 ALREADY_EXISTS="LS_COLORS already exists. Do you want to delete it? [yN] "
+SHARE="$HOME/.local/share"
+FILE="$SHARE/lscolors.sh"
 
 # If LS_COLORS wasn't installed, try installing it.
-if [ -z "$lscolors_data_dir" ]; then
+if [ ! -f "$FILE" ]; then
     # LS_COLORS depends on ~/.local/share existing.
-    mkdir -p ~/.local/share
+    mkdir -p "$SHARE"
     if [ -d LS_COLORS ]; then
         read -p "$ALREADY_EXISTS" prompt
         if [[ $prompt =~ ^[yY] ]]; then
             echo "Removing LS_COLORS."
             rm -rf LS_COLORS
+            git clone "$GIT_URL" && cd LS_COLORS && bash install.sh
         else
             echo "Aborting removal and script."
-            exit 1
         fi
     fi
-    git clone "$GIT_URL" && cd LS_COLORS && bash install.sh
-fi
-
-file="$lscolors_data_dir/lscolors.sh"
-
-if [ -f "$file" ]; then
-    . "$file"
+else
+    . "$FILE"
 fi
