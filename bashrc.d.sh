@@ -20,8 +20,12 @@ END
 
 # If the injection block isn't found in ~/.bashrc, ask the user whether to
 # inject the block to allow .bashrc.d functionality.
-grep -z "$TEXT" ~/.bashrc 2&> /dev/null
-if [[ $? != 0 ]]; then
+#grep -z "$TEXT" ~/.bashrc 2&> /dev/null
+IFS=$'\n' ARR=($TEXT)
+TEXT_LEN=$(echo "$TEXT" | wc -l)
+TEXT_BASHRC=$(grep -A $TEXT_LEN -F "${ARR[0]}" ~/.bashrc)
+
+if [[ "$TEXT" != "$TEXT_BASHRC" ]]; then
     read -p "$INJECT_BASHRCD" prompt
     if [[ $prompt =~ ^[yY] ]]; then
         type -t copy_tmp 2&> /dev/null
