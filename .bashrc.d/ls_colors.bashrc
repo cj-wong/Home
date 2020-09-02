@@ -5,7 +5,7 @@
 # if the files (repo) aren't locally found and given consent.
 
 GIT_URL="git://github.com/trapd00r/LS_COLORS.git"
-ALREADY_EXISTS="LS_COLORS already exists. Do you want to delete it? [yN]"
+ALREADY_EXISTS="LS_COLORS already exists. Do you want to delete it? [yN] "
 
 # If LS_COLORS wasn't installed, try installing it.
 if [ -z "$lscolors_data_dir" ]; then

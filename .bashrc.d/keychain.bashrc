@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#
 # Companion script for: https://www.funtoo.org/Keychain
 
 command -v keychain 2&> /dev/null
