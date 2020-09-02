@@ -18,13 +18,13 @@ fi
 END
 )
 
-# If the injection block isn't found in ~/.bashrc, ask the user whether to
-# inject the block to allow .bashrc.d functionality.
-#grep -z "$TEXT" ~/.bashrc 2&> /dev/null
+# Compare whether the block of text in .bashrc matches $TEXT here.
 IFS=$'\n' ARR=($TEXT)
 TEXT_LEN=$(echo "$TEXT" | wc -l)
 TEXT_BASHRC=$(grep -A $TEXT_LEN -F "${ARR[0]}" ~/.bashrc)
 
+# If the injection block isn't found in ~/.bashrc, ask the user whether to
+# inject the block to allow .bashrc.d functionality.
 if [[ "$TEXT" != "$TEXT_BASHRC" ]]; then
     read -p "$INJECT_BASHRCD" prompt
     if [[ $prompt =~ ^[yY] ]]; then
