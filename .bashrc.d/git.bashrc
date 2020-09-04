@@ -16,7 +16,7 @@ function git_specify_key() {
         if [ ! -f "$KEY" ]; then
             echo "$1 is not a valid ssh private key."
             echo "Please supply a name or location of the private key."
-            exit 1
+            return 1
         fi
     else
         KEY="$1"

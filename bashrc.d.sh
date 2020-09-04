@@ -3,8 +3,8 @@
 # Injects .bashrc.d functionality into .bashrc
 
 INJECT_BASHRCD=$(cat <<END
-.bashrc.d functionality was not detected in your .bashrc file. If injected,
-your old .bashrc will be saved to a temporary file.
+.bashrc.d functionality was not detected in your .bashrc file.
+If injected, your old .bashrc will be saved to a temporary file.
 Do you want to inject this? [yN] 
 END
 )
