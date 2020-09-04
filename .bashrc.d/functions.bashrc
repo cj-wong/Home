@@ -11,7 +11,7 @@
 #   $2: the directory to use; defaults to $HOME if empty
 # Returns:
 #   0: if no errors occurred
-#   1: if a file ($2) was not supplied
+#   1: if a file ($1) was not supplied
 function copy_tmp() {
     # $1 must not be empty.
     if [ -z "$1" ]; then
