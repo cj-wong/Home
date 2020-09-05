@@ -18,9 +18,19 @@ if [ ! -f "$FILE" ]; then
         if [[ $prompt =~ ^[yY] ]]; then
             echo "Removing LS_COLORS."
             rm -rf LS_COLORS
-            git clone "$GIT_URL" && cd LS_COLORS && bash install.sh
+            git clone "$GIT_URL" \
+                && cd LS_COLORS \
+                && bash install.sh \
+                && . "$FILE"
         else
-            echo "Aborting removal and script."
+            read -p "Reinstall using existing LS_COLORS? [yN] " reinstall
+            if [[ $reinstall =~ ^[yY] ]]; then
+                cd LS_COLORS \
+                    && bash install.sh \
+                    && . "$FILE"
+            else
+                echo "Aborting removal and script."
+            fi
         fi
     fi
 else
