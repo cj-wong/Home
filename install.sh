@@ -45,4 +45,7 @@ for file in * .[^.]*; do
     ln -s "$REPO_DIR/$file" ~
 done
 
+echo "Changing repository directory permissions to 700"
+chmod 700 "$REPO_DIR"
+
 cd "$LAST_DIR"
