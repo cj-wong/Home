@@ -20,8 +20,6 @@ FILE_BLACKLIST=(
     "install.sh"
 )
 
-echo "?"
-
 for file in * .[^.]*; do
     echo "Checking ${file}..."
     home_file="${HOME}/${file}"

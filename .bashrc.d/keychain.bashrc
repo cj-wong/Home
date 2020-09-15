@@ -4,7 +4,7 @@
 
 command -v keychain 2&> /dev/null
 if [[ $? != 0 ]]; then
-    echo "keychain is not installed. Aborting script."
+    echo "keychain is not installed. Aborting keychain.bashrc."
 else
     KEYS=( )
 

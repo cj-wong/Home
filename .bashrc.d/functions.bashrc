@@ -15,7 +15,7 @@
 function copy_tmp() {
     # $1 must not be empty.
     if [ -z "$1" ]; then
-        echo "\$1 is empty; supply a file name. Aborting script."
+        echo "\$1 is empty; supply a file name. Aborting copy_tmp()."
         return 1
     elif [ ! -f $1 ]; then
         echo "\$1 doesn't exist. You supplied '$1'".

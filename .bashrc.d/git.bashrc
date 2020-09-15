@@ -12,7 +12,7 @@
 #   1: if a file ($2) was not supplied
 function git_specify_key() {
     if [ -z "$1" ]; then
-        echo "\$1 is empty; supply a private key. Aborting script."
+        echo "\$1 is empty; supply a private key. Aborting git.bashrc."
         return 1
     elif [ ! -f "$1" ]; then
         KEY="$HOME/.ssh/$1"
