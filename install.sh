@@ -6,7 +6,7 @@
 REPO_DIR=$(dirname $0)
 LAST_DIR=$(pwd)
 
-cd "$REPO_DIR"
+pushd "$REPO_DIR"
 REPO_DIR=$(pwd)
 
 "${REPO_DIR}/bashrc.d.sh"
@@ -60,4 +60,4 @@ done
 echo "Changing repository directory permissions to 700."
 chmod 700 "$REPO_DIR"
 
-cd "$LAST_DIR"
+popd
