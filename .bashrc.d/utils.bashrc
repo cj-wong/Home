@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Assorted functions to use
+# Utility functions and settings
 
 # Copies a file to a temporary location, given a directory and filename.
 # Globals:

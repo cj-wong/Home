@@ -30,7 +30,7 @@ if [[ "$TEXT" != "$TEXT_BASHRC" ]]; then
     if [[ $prompt =~ ^[yY] ]]; then
         type -t copy_tmp 2&> /dev/null
         if [[ $? != 0 ]]; then
-            . "$(dirname $0)/.bashrc.d/functions.bashrc"
+            . "$(dirname $0)/.bashrc.d/utils.bashrc"
         fi
         copy_tmp ~/.bashrc
         echo "$TEXT" >>  ~/.bashrc
