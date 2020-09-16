@@ -80,9 +80,11 @@ else
             echo "Reference: ${name}${email}"
             continue
         fi
-        IDENTITIES["$name"]="$email"
+        # Because names are less unique than email addresses,
+        # email is the key for the associative array.
+        IDENTITIES["$email"]="$name"
     # jq will concatenate the .name and .email fields with a '/'.
-    done < <(jq -c '.[] | (.name + "/" + .email') 2>&1
+    done < <(jq -r -c '.[] | (.name + "/" + .email)' "$JSON") 2>&1
 
     export IDENTITIES
 fi
