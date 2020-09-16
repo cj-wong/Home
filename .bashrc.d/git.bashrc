@@ -43,7 +43,7 @@ function git_show_identity() {
     echo "- Name: '${GLOBAL_NAME}'"
     echo "- Email: ${GLOBAL_EMAIL}"
     echo
-    git status > /dev/null 2&>1
+    git status > /dev/null 2>&1
     if [[ $? = 0 ]]; then
         CURRENT_NAME=$(git config user.name)
         CURRENT_EMAIL=$(git config user.email)
@@ -61,6 +61,21 @@ function git_show_identity() {
         echo "you do not have a current identity."
         return 1
     fi
+}
+
+# Show all configured identities from ~/.bashrc.d/git/identities/identities.json
+# Globals:
+#   IDENTITIES: an associative array with emails as keys and names as values
+# Arguments:
+#   None
+# Returns:
+#   0: if no errors occurred
+function git_show_all_identities() {
+    for email in "${!IDENTITIES[@]}"; do
+        echo "Name: '${IDENTITIES[${email}]}'"
+        echo "Email: ${email}"
+        echo
+    done
 }
 
 # Module-level code
