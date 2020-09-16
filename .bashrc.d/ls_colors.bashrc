@@ -29,7 +29,7 @@ if [ ! -f "$FILE" ]; then
                     && bash install.sh \
                     && . "$FILE"
             else
-                echo "Aborting removal and script."
+                echo "Aborting removal and ls_colors.bashrc."
             fi
         fi
     fi
