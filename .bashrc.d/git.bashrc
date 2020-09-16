@@ -28,6 +28,35 @@ function git_specify_key() {
     git config core.sshCommand "ssh -i $KEY"
 }
 
+# Show the current identity along with global identity of current repo
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   0: if the command was run in a git repo
+#   1: if the command wasn't run in a git repo
+function git_show_identity() {
+    GLOBAL_NAME=$(git config --global user.name)
+    GLOBAL_EMAIL=$(git config --global user.email)
+    echo "Global identity"
+    echo "- Name: '${GLOBAL_NAME}'"
+    echo "- Email: ${GLOBAL_EMAIL}"
+    echo
+    git status > /dev/null 2&>1
+    if [[ $? = 0 ]]; then
+        CURRENT_NAME=$(git config user.name)
+        CURRENT_EMAIL=$(git config user.email)
+        echo "Current identity"
+        echo "- Name: '${CURRENT_NAME}'"
+        echo "- Email: ${CURRENT_EMAIL}"
+    else
+        echo "Because you are not in a git repo,"
+        echo "you do not have a current identity."
+        return 1
+    fi
+}
+
 # Module-level code
 
 JSON="${HOME}/.bashrc.d/git/identities/identities.json"
