@@ -25,12 +25,12 @@ function copy_tmp() {
     # $2 can be optional.
     if [ -z "$2" ]; then
         echo "\$2 is empty; assuming \$HOME as directory."
-        OUT_DIR="$HOME"
+        local OUT_DIR="$HOME"
     else
-        OUT_DIR="$2"
+        local OUT_DIR="$2"
     fi
 
-    OLD=$(mktemp -p "$OUT_DIR")
+    local OLD=$(mktemp -p "$OUT_DIR")
     cp "$1" "$OLD"
     echo "Saved ${1} to ${OLD}"
 }

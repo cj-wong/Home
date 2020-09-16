@@ -15,14 +15,14 @@ function git_specify_key() {
         echo "\$1 is empty; supply a private key. Aborting git.bashrc."
         return 1
     elif [ ! -f "$1" ]; then
-        KEY="$HOME/.ssh/$1"
+        local KEY="$HOME/.ssh/$1"
         if [ ! -f "$KEY" ]; then
             echo "$1 is not a valid ssh private key."
             echo "Please supply a name or location of the private key."
             return 1
         fi
     else
-        KEY="$1"
+        local KEY="$1"
     fi
 
     git config core.sshCommand "ssh -i $KEY"
@@ -37,16 +37,16 @@ function git_specify_key() {
 #   0: if the command was run in a git repo
 #   1: if the command wasn't run in a git repo
 function git_show_identity() {
-    GLOBAL_NAME=$(git config --global user.name)
-    GLOBAL_EMAIL=$(git config --global user.email)
+    local GLOBAL_NAME=$(git config --global user.name)
+    local GLOBAL_EMAIL=$(git config --global user.email)
     echo "Global identity"
     echo "- Name: '${GLOBAL_NAME}'"
     echo "- Email: ${GLOBAL_EMAIL}"
     echo
     git status > /dev/null 2>&1
     if [[ $? = 0 ]]; then
-        CURRENT_NAME=$(git config user.name)
-        CURRENT_EMAIL=$(git config user.email)
+        local CURRENT_NAME=$(git config user.name)
+        local CURRENT_EMAIL=$(git config user.email)
         echo "Current identity"
         echo "- Name: '${CURRENT_NAME}'"
         echo "- Email: ${CURRENT_EMAIL}"
@@ -71,6 +71,7 @@ function git_show_identity() {
 # Returns:
 #   0: if no errors occurred
 function git_show_all_identities() {
+    local email
     for email in "${!IDENTITIES[@]}"; do
         echo "Name: '${IDENTITIES[${email}]}'"
         echo "Email: ${email}"
