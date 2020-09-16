@@ -79,6 +79,47 @@ function git_show_all_identities() {
     done
 }
 
+# Specify an email by providing a pattern to grep email in IDENTITIES
+# Globals:
+#   IDENTITIES: an associative array with emails as keys and names as values
+# Arguments:
+#   $1: a pattern that should match only one email address; must not be empty
+# Returns:
+#   0: if a match was found and the identity was set
+#   1: if a pattern ($1) was not supplied
+#   2: if the pattern matched multiple emails
+function git_specify_identity() {
+    if [ -z "$1" ]; then
+        echo "\$1 is empty; supply an identity pattern."
+        echo "Aborting git_specify_identity()."
+        return 1
+    fi
+
+    local email
+    local matched_name
+    local matched_email
+    for email in "${!IDENTITIES[@]}"; do
+        grep "$1" <(echo "$email") > /dev/null 2>&1
+        if [[ $? = 0 ]]; then
+            if [ ! -z "$matched_email" ]; then
+                echo "Your pattern ($1) matches too many emails."
+                echo "Aborting git_specify_identity()."
+                return 2
+            else
+                matched_email="$email"
+                matched_name="${IDENTITIES[${email}]}"
+            fi
+        fi
+    done
+
+    git config user.name "$matched_name"
+    git config user.email "$matched_email"
+
+    echo "Your current git identity has been set:"
+    echo "- Name: '${matched_name}'"
+    echo "- Email: ${matched_email}"
+}
+
 # Module-level code
 
 JSON="${HOME}/.bashrc.d/git/identities/identities.json"
