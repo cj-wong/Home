@@ -50,6 +50,12 @@ function git_show_identity() {
         echo "Current identity"
         echo "- Name: '${CURRENT_NAME}'"
         echo "- Email: ${CURRENT_EMAIL}"
+        if [ "$GLOBAL_NAME" = "$CURRENT_NAME" ]; then
+            if [ "$GLOBAL_EMAIL" = "$CURRENT_EMAIL" ]; then
+                echo
+                echo "The two identities are the same."
+            fi
+        fi
     else
         echo "Because you are not in a git repo,"
         echo "you do not have a current identity."
