@@ -27,3 +27,33 @@ function git_specify_key() {
 
     git config core.sshCommand "ssh -i $KEY"
 }
+
+# Module-level code
+
+JSON="${HOME}/.bashrc.d/git/identities/identities.json"
+
+command -v jq 2&> /dev/null
+if [[ $? != 0 ]]; then
+    echo "jq is not installed. Install jq to enable identity management."
+elif [ ! -f "$JSON" ]; then
+    echo "identities.json doesn't exist in ${HOME}/.bashrc.d/git/identities/."
+    echo "Create one to enable identity management."
+else
+    declare -A IDENTITIES
+
+    while read -r identity; do
+        # With the concatenation separator (see below), we can extract
+        # the name and email of this pair.
+        name=$(echo "$identity" | cut -d/ -f1)
+        email=$(echo "$identity" | cut -d/ -f2)
+        if [ -z "$name" -o -z "$email" ]; then
+            echo "Skipping key pair with missing name or email."
+            echo "Reference: ${name}${email}"
+            continue
+        fi
+        IDENTITIES["$name"]="$email"
+    # jq will concatenate the .name and .email fields with a '/'.
+    done < <(jq -c '.[] | (.name + "/" + .email') 2>&1
+
+    export IDENTITIES
+fi
