@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.5] - 2020-09-21
+### Changed
+- `keychain` should not run under SSH sessions now
+
 ## [0.1.4] - 2020-09-15
 ### Added
 - Added `git` identity management [functions](.bashrc.d/git.bashrc)
