@@ -2,7 +2,7 @@
 #
 # Companion script for: https://www.funtoo.org/Keychain
 
-command -v keychain 2&> /dev/null
+command -v keychain 2>&1 > /dev/null
 is_installed=$?
 
 if [ -n "$SSH_CLIENT" ]; then

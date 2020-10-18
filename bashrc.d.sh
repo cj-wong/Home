@@ -28,7 +28,7 @@ TEXT_BASHRC=$(grep -A $TEXT_LEN -F "${ARR[0]}" ~/.bashrc)
 if [[ "$TEXT" != "$TEXT_BASHRC" ]]; then
     read -p "$INJECT_BASHRCD" prompt
     if [[ $prompt =~ ^[yY] ]]; then
-        type -t copy_tmp 2&> /dev/null
+        type -t copy_tmp 2>&1 > /dev/null
         if [[ $? != 0 ]]; then
             . "$(dirname $0)/.bashrc.d/utils.bashrc"
         fi

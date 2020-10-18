@@ -43,7 +43,7 @@ function git_show_identity() {
     echo "- Name: '${GLOBAL_NAME}'"
     echo "- Email: ${GLOBAL_EMAIL}"
     echo
-    git status > /dev/null 2>&1
+    git status 2>&1 > /dev/null
     if [[ $? = 0 ]]; then
         local CURRENT_NAME=$(git config user.name)
         local CURRENT_EMAIL=$(git config user.email)
@@ -99,7 +99,7 @@ function git_specify_identity() {
     local matched_name
     local matched_email
     for email in "${!IDENTITIES[@]}"; do
-        grep "$1" <(echo "$email") > /dev/null 2>&1
+        grep "$1" <(echo "$email") 2>&1 > /dev/null
         if [[ $? = 0 ]]; then
             if [ ! -z "$matched_email" ]; then
                 echo "Your pattern ($1) matches too many emails."
@@ -124,7 +124,7 @@ function git_specify_identity() {
 
 JSON="${HOME}/.bashrc.d/git/identities/identities.json"
 
-command -v jq 2&> /dev/null
+command -v jq 2>&1 > /dev/null
 if [[ $? != 0 ]]; then
     echo "jq is not installed. Install jq to enable identity management."
 elif [ ! -f "$JSON" ]; then
