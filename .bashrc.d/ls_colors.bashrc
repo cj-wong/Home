@@ -9,8 +9,10 @@ ALREADY_EXISTS="LS_COLORS already exists. Do you want to delete it? [yN] "
 SHARE="$HOME/.local/share"
 FILE="$SHARE/lscolors.sh"
 
+if [ -f "$FILE" ]; then
+    . "$FILE"
 # If LS_COLORS wasn't installed, try installing it.
-if [ ! -f "$FILE" ]; then
+else
     # LS_COLORS depends on ~/.local/share existing.
     mkdir -p "$SHARE"
     if [ -d LS_COLORS ]; then
@@ -33,6 +35,4 @@ if [ ! -f "$FILE" ]; then
             fi
         fi
     fi
-else
-    . "$FILE"
 fi
