@@ -3,9 +3,8 @@
 # Utilities for Windows Subsystem for Linux
 
 whereis wsl.exe 2>&1 > /dev/null
-is_wsl=$?
 
-if [[ "$is_wsl" != 0 ]]; then
+if [[ $? != 0 ]]; then
     # Don't do anything if not WSL.
     :
 else
