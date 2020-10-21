@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - `copy_tmp()` from [utils.bashrc](.bashrc.d/utils.bashrc) was not being loaded correctly in [install.sh](install.sh). The install script now makes sure to source the utils file.
+- Switched from `whereis` to `command -v`, because `whereis` returns 0 even with nothing is found.
 
 ## [0.3.0] - 2020-10-18
 ### Added
