@@ -16,7 +16,7 @@ else
     # LS_COLORS depends on ~/.local/share existing.
     mkdir -p "$SHARE"
     if [ -d LS_COLORS ]; then
-        read -p "$ALREADY_EXISTS" prompt
+        read -r -p "$ALREADY_EXISTS" prompt
         if [[ $prompt =~ ^[yY] ]]; then
             echo "Removing LS_COLORS."
             rm -rf LS_COLORS
@@ -25,7 +25,7 @@ else
                 && bash install.sh \
                 && . "$FILE"
         else
-            read -p "Reinstall using existing LS_COLORS? [yN] " reinstall
+            read -r -p "Reinstall using existing LS_COLORS? [yN] " reinstall
             if [[ $reinstall =~ ^[yY] ]]; then
                 cd LS_COLORS \
                     && bash install.sh \

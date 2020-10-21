@@ -37,16 +37,19 @@ function git_specify_key() {
 #   0: if the command was run in a git repo
 #   1: if the command wasn't run in a git repo
 function git_show_identity() {
-    local GLOBAL_NAME=$(git config --global user.name)
-    local GLOBAL_EMAIL=$(git config --global user.email)
+    local GLOBAL_NAME
+    local GLOBAL_EMAIL
+    GLOBAL_NAME=$(git config --global user.name)
+    GLOBAL_EMAIL=$(git config --global user.email)
     echo "Global identity"
     echo "- Name: '${GLOBAL_NAME}'"
     echo "- Email: ${GLOBAL_EMAIL}"
     echo
-    git status 2>&1 > /dev/null
-    if [[ $? = 0 ]]; then
-        local CURRENT_NAME=$(git config user.name)
-        local CURRENT_EMAIL=$(git config user.email)
+    if git status > /dev/null 2>&1; then
+        local CURRENT_NAME
+        local CURRENT_EMAIL
+        CURRENT_NAME=$(git config user.name)
+        CURRENT_EMAIL=$(git config user.email)
         echo "Current identity"
         echo "- Name: '${CURRENT_NAME}'"
         echo "- Email: ${CURRENT_EMAIL}"
@@ -99,9 +102,9 @@ function git_specify_identity() {
     local matched_name
     local matched_email
     for email in "${!IDENTITIES[@]}"; do
-        grep "$1" <(echo "$email") 2>&1 > /dev/null
-        if [[ $? = 0 ]]; then
-            if [ ! -z "$matched_email" ]; then
+        grep "$1" <(echo "$email") > /dev/null 2>&1
+        if grep "$1" <(echo "$email") > /dev/null 2>&1; then
+            if [ -n "$matched_email" ]; then
                 echo "Your pattern ($1) matches too many emails."
                 echo "Aborting git_specify_identity()."
                 return 2
@@ -124,8 +127,7 @@ function git_specify_identity() {
 
 JSON="${HOME}/.bashrc.d/git/identities/identities.json"
 
-command -v jq 2>&1 > /dev/null
-if [[ $? != 0 ]]; then
+if ! command -v jq > /dev/null 2>&1; then
     echo "jq is not installed. Install jq to enable identity management."
 elif [ ! -f "$JSON" ]; then
     echo "identities.json doesn't exist in ${HOME}/.bashrc.d/git/identities/."
@@ -138,7 +140,7 @@ else
         # the name and email of this pair.
         name=$(echo "$identity" | cut -d/ -f1)
         email=$(echo "$identity" | cut -d/ -f2)
-        if [ -z "$name" -o -z "$email" ]; then
+        if [[ -z "$name" || -z "$email" ]]; then
             echo "Skipping key pair with missing name or email."
             echo "Reference: ${name}${email}"
             continue

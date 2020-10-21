@@ -53,9 +53,7 @@ function is_excluded() {
 
 # Module-level code
 
-command -v keychain 2>&1 > /dev/null
-
-if [[ $? != 0 ]]; then
+if ! command -v keychain > /dev/null 2>&1; then
     echo "keychain is not installed. Aborting keychain.bashrc."
 elif [ -n "$SSH_CLIENT" ]; then
     echo "keychain will not start in SSH sessions. Aborting keychain.bashrc."
@@ -67,15 +65,14 @@ else
     for pubkey in ~/.ssh/*.pub; do
         privkey="${pubkey%.pub}"
         stemkey="${privkey##*/}"
-        is_excluded "$stemkey"
 
-        if [[ $? != 0 ]]; then
+        if ! is_excluded "$stemkey"; then
             echo "Excluded key: ${privkey}"
             continue
         elif [ -f "$privkey" ]; then
-            KEYS+=($privkey)
+            KEYS+=("$privkey")
         fi
     done
 
-    eval `keychain --eval --agents ssh --clear ${KEYS[@]}`
+    eval "$(keychain --eval --agents ssh --clear "${KEYS[@]}")"
 fi

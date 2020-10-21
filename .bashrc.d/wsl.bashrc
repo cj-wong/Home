@@ -2,9 +2,7 @@
 #
 # Utilities for Windows Subsystem for Linux
 
-whereis wsl.exe 2>&1 > /dev/null
-
-if [[ $? != 0 ]]; then
+if ! whereis wsl.exe > /dev/null 2>&1; then
     # Don't do anything if not WSL.
     :
 else
@@ -16,9 +14,8 @@ else
     # will come first, but wsl.exe leaves an empty line that comes before
     # the line with the asterisk.
     while read -r vm; do
-        echo "$vm" | grep "^*" 2>&1 > /dev/null
         # Ignore all other VMs. Only focus on the current VM.
-        if [[ $? != 0 ]]; then
+        if ! echo "$vm" | grep "^\*" > /dev/null 2>&1; then
             continue
         else
             wsl_ver=$(echo "$vm" | sed -E 's/^\* [A-Za-z ]+([12]).*$/\1/g')
@@ -30,8 +27,9 @@ else
                 #   https://techcommunity.microsoft.com/t5
                 #       /windows-dev-appconsult
                 #       /running-wsl-gui-apps-on-windows-10/ba-p/1493242
-                export DISPLAY=$(grep nameserver /etc/resolv.conf \
+                DISPLAY=$(grep nameserver /etc/resolv.conf \
                     | sed 's/nameserver //'):0
+                export DISPLAY
             fi
             # Since there should only be one VM marked with the asterisk,
             # stop the loop entirely.

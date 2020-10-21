@@ -17,7 +17,7 @@ function copy_tmp() {
     if [ -z "$1" ]; then
         echo "\$1 is empty; supply a file name. Aborting copy_tmp()."
         return 1
-    elif [ ! -f $1 ]; then
+    elif [ ! -f "$1" ]; then
         echo "\$1 doesn't exist. You supplied '$1'".
         return 1
     fi
@@ -30,7 +30,8 @@ function copy_tmp() {
         local OUT_DIR="$2"
     fi
 
-    local OLD=$(mktemp -p "$OUT_DIR")
+    local OLD
+    OLD=$(mktemp -p "$OUT_DIR")
     cp "$1" "$OLD"
     echo "Saved ${1} to ${OLD}"
 }

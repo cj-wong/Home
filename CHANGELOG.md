@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.1] - 2020-10-20
+### Changed
+- Syntax is now linted with `shellcheck`.
+
+### Fixed
+- `copy_tmp()` from [utils.bashrc](.bashrc.d/utils.bashrc) was not being loaded correctly in [install.sh](install.sh). The install script now makes sure to source the utils file.
+
 ## [0.3.0] - 2020-10-18
 ### Added
 - Added [Windows Subsystem for Linux](.bashrc.d/wsl.bashrc) utilities
