@@ -2,7 +2,7 @@
 #
 # Utilities for Windows Subsystem for Linux
 
-if ! command wsl.exe > /dev/null 2>&1; then
+if ! command -v wsl.exe > /dev/null 2>&1; then
     # Don't do anything if not WSL.
     :
 else
