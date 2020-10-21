@@ -29,7 +29,6 @@ if [[ "$TEXT" != "$TEXT_BASHRC" ]]; then
     read -r -p "$INJECT_BASHRCD" prompt
     if [[ $prompt =~ ^[yY] ]]; then
         if ! type -t copy_tmp > /dev/null 2>&1; then
-            # shellcheck source=/dev/null
             . "$(dirname "$0")/.bashrc.d/utils.bashrc"
         fi
         copy_tmp ~/.bashrc

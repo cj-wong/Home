@@ -22,7 +22,6 @@ FILE_BLACKLIST=(
 )
 
 if ! type -t copy_tmp > /dev/null 2>&1; then
-    # shellcheck source=/dev/null
     . "$(dirname "$0")/.bashrc.d/utils.bashrc"
 fi
 
