@@ -3,10 +3,11 @@
 # Installs core files in Home to user home.
 # As a pre-run condition, runs ./bashrc.d.sh.
 
-REPO_DIR=$(dirname $0)
+REPO_DIR=$(dirname "$0")
 LAST_DIR=$(pwd)
 
-pushd "$REPO_DIR"
+pushd "$REPO_DIR" \
+    || (echo "Could not go into ${REPO_DIR}. Aborting." && exit 1)
 REPO_DIR=$(pwd)
 
 "${REPO_DIR}/bashrc.d.sh"
@@ -20,21 +21,26 @@ FILE_BLACKLIST=(
     "install.sh"
 )
 
+if ! type -t copy_tmp > /dev/null 2>&1; then
+    # shellcheck source=/dev/null
+    . "$(dirname "$0")/.bashrc.d/utils.bashrc"
+fi
+
 for file in * .[^.]*; do
     echo "Checking ${file}..."
     home_file="${HOME}/${file}"
     repo_file="${REPO_DIR}/${file}"
-    if [[ -d "$file" && "${DIR_BLACKLIST[@]}" =~ "$file" ]]; then
+    if [[ -d "$file" && "${DIR_BLACKLIST[*]}" =~ $file ]]; then
         echo "${file} is in the blacklist for directories. Skipping."
         continue
-    elif [[ -f "$file" && "${FILE_BLACKLIST[@]}" =~ "$file" ]]; then
+    elif [[ -f "$file" && "${FILE_BLACKLIST[*]}" =~ $file ]]; then
         echo "${file} is in the blacklist for files. Skipping."
         continue
     fi
 
     if [ -h "$home_file" ]; then
         resolved=$(readlink "$home_file")
-        if [ ! -z "$resolved" ]; then
+        if [ -n "$resolved" ]; then
             if [ "$resolved" = "$repo_file" ]; then
                 echo "${home_file} already points to the right file. Skipping."
                 continue
@@ -60,4 +66,4 @@ done
 echo "Changing repository directory permissions to 700."
 chmod 700 "$REPO_DIR"
 
-popd
+popd || cd "$LAST_DIR" || echo "Could not return to original directory."

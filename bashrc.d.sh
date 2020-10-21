@@ -19,18 +19,18 @@ END
 )
 
 # Compare whether the block of text in .bashrc matches $TEXT here.
-IFS=$'\n' ARR=($TEXT)
+IFS=$'\n' ARR=("$TEXT")
 TEXT_LEN=$(echo "$TEXT" | wc -l)
-TEXT_BASHRC=$(grep -A $TEXT_LEN -F "${ARR[0]}" ~/.bashrc)
+TEXT_BASHRC=$(grep -A "$TEXT_LEN" -F "${ARR[0]}" ~/.bashrc)
 
 # If the injection block isn't found in ~/.bashrc, ask the user whether to
 # inject the block to allow .bashrc.d functionality.
 if [[ "$TEXT" != "$TEXT_BASHRC" ]]; then
-    read -p "$INJECT_BASHRCD" prompt
+    read -r -p "$INJECT_BASHRCD" prompt
     if [[ $prompt =~ ^[yY] ]]; then
-        type -t copy_tmp 2>&1 > /dev/null
-        if [[ $? != 0 ]]; then
-            . "$(dirname $0)/.bashrc.d/utils.bashrc"
+        if ! type -t copy_tmp > /dev/null 2>&1; then
+            # shellcheck source=/dev/null
+            . "$(dirname "$0")/.bashrc.d/utils.bashrc"
         fi
         copy_tmp ~/.bashrc
         echo "$TEXT" >>  ~/.bashrc
