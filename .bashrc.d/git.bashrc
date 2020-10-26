@@ -137,7 +137,7 @@ function git_add_origin() {
         return 1
     fi
 
-    if git remote set-url --add --push "$1"; then
+    if git remote set-url --add --push origin "$1"; then
         :
     else
         e="$?"
@@ -147,6 +147,7 @@ function git_add_origin() {
             read -r -p "Do you want to set ${1} as your origin?" prompt
             if [[ $prompt =~ ^[yY] ]]; then
                 git remote add origin "$1"
+                echo "You may have to rerun this function with the same origin."
             else
                 echo "Canceled."
                 return 2
