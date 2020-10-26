@@ -123,6 +123,41 @@ function git_specify_identity() {
     echo "- Email: ${matched_email}"
 }
 
+# Add a new origin to a project for simultaneous pushes
+# Arguments:
+#   $1: a git remote repository
+# Returns:
+#   0: if the origin was added successfully
+#   1: if $1 was not supplied
+#   2: if an origin wasn't set already and user canceled adding $1 as new origin
+function git_add_origin() {
+    if [ -z "$1" ]; then
+        echo "\$1 is empty; supply a remote git repository."
+        echo "Aborting git_add_origin()."
+        return 1
+    fi
+
+    if git remote set-url --add --push "$1"; then
+        :
+    else
+        e="$?"
+        if [[ "$e" == 128 ]]; then
+            # fatal: No such remote 'origin'
+            echo "No origin was set."
+            read -r -p "Do you want to set ${1} as your origin?" prompt
+            if [[ $prompt =~ ^[yY] ]]; then
+                git remote add origin "$1"
+            else
+                echo "Canceled."
+                return 2
+            fi
+        fi
+    fi
+
+    return 0
+}
+
+
 # Module-level code
 
 JSON="${HOME}/.bashrc.d/git/identities/identities.json"
