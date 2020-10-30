@@ -9,8 +9,9 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # ls
-alias ll='ls -alF'
-alias la='ls -A'
+alias lh='ls -h'
+alias ll='lh -alF'
+alias la='lh -A'
 alias l='ls -CF'
 
 # grep, for projects
