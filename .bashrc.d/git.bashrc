@@ -2,6 +2,23 @@
 #
 # Functions (helper and shortcuts) for git
 
+# Checks whether the working directory is a git repository.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   0: if the directory is a git repository
+#   1: not a git repository
+function git_is_repo() {
+    if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+        return 0
+    else
+        echo "This is not a git repository." 1>&2
+        return 1
+    fi
+}
+
 # Changes ssh key used for git.
 # Globals:
 #   None
@@ -10,8 +27,11 @@
 # Returns:
 #   0: if no errors occurred
 #   1: if a file ($2) was not supplied
+#   255: if not run within a git repository
 function git_specify_key() {
-    if [ -z "$1" ]; then
+    if ! git_is_repo; then
+        return 255
+    elif [ -z "$1" ]; then
         echo "\$1 is empty; supply a private key. Aborting git.bashrc."
         return 1
     elif [ ! -f "$1" ]; then
@@ -35,7 +55,7 @@ function git_specify_key() {
 #   None
 # Returns:
 #   0: if the command was run in a git repo
-#   1: if the command wasn't run in a git repo
+#   255: if the command wasn't run in a git repo
 function git_show_identity() {
     local GLOBAL_NAME
     local GLOBAL_EMAIL
@@ -45,7 +65,7 @@ function git_show_identity() {
     echo "- Name: '${GLOBAL_NAME}'"
     echo "- Email: ${GLOBAL_EMAIL}"
     echo
-    if git status > /dev/null 2>&1; then
+    if git_is_repo > /dev/null; then
         local CURRENT_NAME
         local CURRENT_EMAIL
         CURRENT_NAME=$(git config user.name)
@@ -62,7 +82,7 @@ function git_show_identity() {
     else
         echo "Because you are not in a git repo,"
         echo "you do not have a current identity."
-        return 1
+        return 255
     fi
 }
 
@@ -91,8 +111,11 @@ function git_show_all_identities() {
 #   0: if a match was found and the identity was set
 #   1: if a pattern ($1) was not supplied
 #   2: if the pattern matched multiple emails
+#   255: if not run in a git repository
 function git_specify_identity() {
-    if [ -z "$1" ]; then
+    if ! git_is_repo; then
+        return 255
+    elif [ -z "$1" ]; then
         echo "\$1 is empty; supply an identity pattern."
         echo "Aborting git_specify_identity()."
         return 1
@@ -130,8 +153,11 @@ function git_specify_identity() {
 #   0: if the origin was added successfully
 #   1: if $1 was not supplied
 #   2: if an origin wasn't set already and user canceled adding $1 as new origin
+#   255: if not run within a git repository
 function git_add_origin() {
-    if [ -z "$1" ]; then
+    if ! git_is_repo; then
+        return 255
+    elif [ -z "$1" ]; then
         echo "\$1 is empty; supply a remote git repository."
         echo "Aborting git_add_origin()."
         return 1
@@ -165,13 +191,15 @@ function git_add_origin() {
 # Returns:
 #   0: if the origin was added successfully
 #   1: if the repository does not have a remote origin URL
-#   2: if not run within a git repository
+#   255: if not run within a git repository
 function git_readd_origin() {
-    local url
-    if ! url=$(git config --local remote.origin.url); then
-        echo "This isn't a git repository."
-        return 2
+    if ! git_is_repo; then
+        return 255
     fi
+
+    local url
+    url=$(git config --local remote.origin.url)
+
     if [ -z "$url" ]; then
         echo "No existing remote origin URL was found."
         echo "Aborting git_seturl_origin()."
