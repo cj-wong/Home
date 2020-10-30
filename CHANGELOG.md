@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.3] - 2020-10-30
+### Changed
+- In [.bash_aliases](.bash_aliases), two existing aliases (`ll`, `la`) will use the new `lh` (equivalent to `ls -h`) for human-readable file sizes.
+
+### Fixed
+- In [git.bashrc](.bashrc.d/git.bashrc), variable `e` was not declared as local.
+
 ## [0.3.2] - 2020-10-25
 ### Added
 - Added a new function in [git.bashrc](.bashrc.d/git.bashrc) `git_add_origin` to add new origins for simultaneous pushes.
