@@ -123,7 +123,7 @@ function git_specify_identity() {
     echo "- Email: ${matched_email}"
 }
 
-# Add a new origin to a project for simultaneous pushes
+# Add a new remote to a project for simultaneous pushes
 # Arguments:
 #   $1: a git remote repository
 # Returns:
@@ -148,9 +148,9 @@ function git_add_origin() {
             read -r -p "Do you want to set ${1} as your origin?" prompt
             if [[ $prompt =~ ^[yY] ]]; then
                 git remote add origin "$1"
-                echo "You may have to rerun this function with the same origin."
+                git remote set-url --add --push origin "$1"
             else
-                echo "Canceled."
+                echo "Aborting git_add_origin()."
                 return 2
             fi
         fi
@@ -159,6 +159,27 @@ function git_add_origin() {
     return 0
 }
 
+# Add existing remote URL to pushurl for simultaneous pushes
+# Arguments:
+#   None
+# Returns:
+#   0: if the origin was added successfully
+#   1: if the repository does not have a remote origin URL
+#   2: if not run within a git repository
+function git_readd_origin() {
+    local url
+    if ! url=$(git config --local remote.origin.url); then
+        echo "This isn't a git repository."
+        return 2
+    fi
+    if [ -z "$url" ]; then
+        echo "No existing remote origin URL was found."
+        echo "Aborting git_seturl_origin()."
+        return 1
+    else
+        git remote set-url --add --push origin "$url"
+    fi
+}
 
 # Module-level code
 
