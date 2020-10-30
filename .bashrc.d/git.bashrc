@@ -140,6 +140,7 @@ function git_add_origin() {
     if git remote set-url --add --push origin "$1"; then
         :
     else
+        local e
         e="$?"
         if [[ "$e" == 128 ]]; then
             # fatal: No such remote 'origin'
