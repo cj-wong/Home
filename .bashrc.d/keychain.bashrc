@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # Companion script for: https://www.funtoo.org/Keychain
 

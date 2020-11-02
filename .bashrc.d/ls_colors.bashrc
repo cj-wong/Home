@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # Companion script for: https://github.com/trapd00r/LS_COLORS
 # Sets dircolors for the terminal by using an external repo. Clones the repo
