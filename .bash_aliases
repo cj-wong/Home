@@ -18,5 +18,6 @@ alias egrep='grep -E'
 
 # grep, for projects
 alias xgrep="egrep --exclude-dir={.git,venv,__pycache__}"
-alias pygrep="xgrep -r --include='*.py'"
 alias mdgrep="xgrep -r --include='*.md'"
+alias pygrep="xgrep -r --include='*.py'"
+alias shgrep="xgrep -r --include='*.sh' --include='*.bashrc'"
