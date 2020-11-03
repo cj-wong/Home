@@ -3,5 +3,6 @@
 # Path manipulation
 
 if [ -d ~/.local/bin ]; then
-    export PATH="$PATH:~/.local/bin"
+    PATH="$PATH:$HOME/.local/bin"
+    export PATH
 fi
