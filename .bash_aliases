@@ -16,8 +16,22 @@ alias l='ls -CF'
 alias fgrep='grep -F'
 alias egrep='grep -E'
 
-# grep, for projects
+# grep, special cases
+alias psgrep=psgrep
 alias xgrep="egrep --exclude-dir={.git,venv,__pycache__}"
 alias mdgrep="xgrep -r --include='*.md'"
 alias pygrep="xgrep -r --include='*.py'"
 alias shgrep="xgrep -r --include='*.sh' --include='*.bashrc'"
+
+# Gets line-by-line of running processes matching arguments.
+# Globals:
+#   None
+# Arguments:
+#   $@: args to be fed to grep
+# Returns:
+#   status code dependent on piped commands
+function psgrep() {
+    # shellcheck disable=SC2009
+    # The use of "$@" twice is somewhat hacky but evidently re-colorizes.
+    ps aux | grep "$@" | grep -v grep | grep "$@"
+}
