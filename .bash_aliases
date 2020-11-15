@@ -32,6 +32,6 @@ alias shgrep="xgrep -r --include='*.sh' --include='*.bashrc'"
 #   status code dependent on piped commands
 function psgrep() {
     # shellcheck disable=SC2009
-    # The use of "$@" twice is somewhat hacky but evidently re-colorizes.
+    # The use of "$@" twice is somewhat hacky but evidently re-colorizes output.
     ps aux | grep "$@" | grep -v grep | grep "$@"
 }
