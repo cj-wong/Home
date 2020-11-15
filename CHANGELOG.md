@@ -3,22 +3,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.4] - 2020-11-14
+### Changed
+- Functions in [.bashrc.d](.bashrc.d) are now prefaced with their file name stem (e.g. `git::is_repo` from `git_is_repo`). This change was made in reference to [the Google Style Guide for Shell](https://google.github.io/styleguide/shellguide.html).
+- Error statements are now sent to stderr.
+- In [ls_colors.bashrc](.bashrc.d/ls_colors.bashrc):
+    - New functions added for sourcing and installing: `lscolors::source` and `lscolors::install`
+    - Removed several variables that were polluting the namespace; they have been replaced with inline strings or placed in functions as local variables
+
 ## [0.3.3] - 2020-10-30
 ### Added
-- In [git.bashrc](.bashrc.d/git.bashrc), `git_readd_origin()` is a new function that adds a repository's remote origin URL to `set-url` for simultaneous pushes. This function is a complement to `git_add_origin()`.
+- In [git.bashrc], `git_readd_origin()` is a new function that adds a repository's remote origin URL to `set-url` for simultaneous pushes. This function is a complement to `git_add_origin()`.
 
 ### Changed
 - In [.bash_aliases](.bash_aliases), two existing aliases (`ll`, `la`) will use the new `lh` (equivalent to `ls -h`) for human-readable file sizes.
 - Also in `.bash_aliases`, aliases are rearranged by base command.
 - Furthermore, the `egrep` and `fgrep` aliases are no longer redundant (e.g. `alias egrep='egrep --color=auto'`) since `grep` is already aliased to `grep --color=auto` and the extended flags of `grep` (e.g. `-E`, for `egrep`) are recommended over the implied form (`egrep` vs `grep -E`).
-- In [git.bashrc](.bashrc.d/git.bashrc) and the case of no prior remote origin for `git_add_origin()`, the function will automatically also add the same origin to `set-url`.
+- In [git.bashrc] and the case of no prior remote origin for `git_add_origin()`, the function will automatically also add the same origin to `set-url`.
 
 ### Fixed
-- In [git.bashrc](.bashrc.d/git.bashrc), variable `e` was not declared as local.
+- In [git.bashrc], variable `e` was not declared as local.
 
 ## [0.3.2] - 2020-10-25
 ### Added
-- Added a new function in [git.bashrc](.bashrc.d/git.bashrc) `git_add_origin` to add new origins for simultaneous pushes.
+- Added a new function in [git.bashrc] `git_add_origin` to add new origins for simultaneous pushes.
 
 ## [0.3.1] - 2020-10-20
 ### Changed
@@ -73,3 +81,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.1.0] - 2020-09-01
 ### Added
 - Initial version, based on my Pixelbook setup
+
+[git.bashrc]: .bashrc.d/git.bashrc
