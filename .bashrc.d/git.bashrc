@@ -14,7 +14,7 @@ function git::is_repo() {
     if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         return 0
     else
-        echo "This is not a git repository." >&2
+        echo "${PWD} is not a git repository." >&2
         return 1
     fi
 }
@@ -58,24 +58,24 @@ function git::specify_key() {
 #   0: if the command was run in a git repo
 #   255: if the command wasn't run in a git repo
 function git::show_identity() {
-    local GLOBAL_NAME
-    local GLOBAL_EMAIL
-    GLOBAL_NAME=$(git config --global user.name)
-    GLOBAL_EMAIL=$(git config --global user.email)
+    local global_name
+    local global_email
+    global_name=$(git config --global user.name)
+    global_email=$(git config --global user.email)
     echo "Global identity"
-    echo "- Name: '${GLOBAL_NAME}'"
-    echo "- Email: ${GLOBAL_EMAIL}"
+    echo "- Name: '${global_name}'"
+    echo "- Email: ${global_email}"
     echo
     if git::is_repo > /dev/null; then
-        local CURRENT_NAME
-        local CURRENT_EMAIL
-        CURRENT_NAME=$(git config user.name)
-        CURRENT_EMAIL=$(git config user.email)
+        local current_name
+        local current_email
+        current_name=$(git config user.name)
+        current_email=$(git config user.email)
         echo "Current identity"
-        echo "- Name: '${CURRENT_NAME}'"
-        echo "- Email: ${CURRENT_EMAIL}"
-        if [ "$GLOBAL_NAME" = "$CURRENT_NAME" ]; then
-            if [ "$GLOBAL_EMAIL" = "$CURRENT_EMAIL" ]; then
+        echo "- Name: '${current_name}'"
+        echo "- Email: ${current_email}"
+        if [ "$global_name" = "$current_name" ]; then
+            if [ "$global_email" = "$current_email" ]; then
                 echo
                 echo "The two identities are the same."
             fi
@@ -148,6 +148,8 @@ function git::specify_identity() {
 }
 
 # Add a new remote to a project for simultaneous pushes
+# Globals:
+#   None
 # Arguments:
 #   $1: a git remote repository
 # Returns:
@@ -183,6 +185,8 @@ function git::add_origin() {
 }
 
 # Add existing remote URL to pushurl for simultaneous pushes
+# Globals:
+#   None
 # Arguments:
 #   None
 # Returns:
@@ -206,17 +210,22 @@ function git::readd_origin() {
     fi
 }
 
-# Module-level code
-
-JSON="${HOME}/.bashrc.d/git/identities/identities.json"
-
-if ! command -v jq > /dev/null 2>&1; then
-    echo "jq is not installed. Install jq to enable identity management."
-elif [ ! -f "$JSON" ]; then
-    echo "identities.json doesn't exist in ${HOME}/.bashrc.d/git/identities/."
-    echo "Create one to enable identity management."
-else
+# Read identities from file and export them to an array.
+# Globals:
+#   GIT_ID_FILE: JSON where the identities are stored
+#   IDENTITIES: an associative array with emails as keys and names as values
+# Arguments:
+#   None
+# Returns:
+#   0: if the origin was added successfully
+#   1: if the repository does not have a remote origin URL
+#   255: if not run within a git repository
+function git::read_identities() {
     declare -A IDENTITIES
+
+    local identity
+    local name
+    local email
 
     while read -r identity; do
         # With the concatenation separator (see below), we can extract
@@ -232,7 +241,20 @@ else
         # email is the key for the associative array.
         IDENTITIES["$email"]="$name"
     # jq will concatenate the .name and .email fields with a '/'.
-    done < <(jq -r -c '.[] | (.name + "/" + .email)' "$JSON") 2>&1
+    done < <(jq -r -c '.[] | (.name + "/" + .email)' "$GIT_ID_FILE") 2>&1
 
     export IDENTITIES
+}
+
+# Module-level code
+
+GIT_ID_FILE="${HOME}/.bashrc.d/git/identities/identities.json"
+
+if ! command -v jq > /dev/null 2>&1; then
+    echo "jq is not installed. Install jq to enable identity management."
+elif [ ! -f "$GIT_ID_FILE" ]; then
+    echo "identities.json doesn't exist in ${HOME}/.bashrc.d/git/identities/."
+    echo "Create one to enable identity management."
+else
+    git::read_identities
 fi
