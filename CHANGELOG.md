@@ -7,9 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Functions in [.bashrc.d](.bashrc.d) are now prefaced with their file name stem (e.g. `git::is_repo` from `git_is_repo`). This change was made in reference to [the Google Style Guide for Shell](https://google.github.io/styleguide/shellguide.html).
 - Error statements are now sent to stderr.
-- In [ls_colors.bashrc](.bashrc.d/ls_colors.bashrc):
-    - New functions added for sourcing and installing: `lscolors::source` and `lscolors::install`
-    - Removed several variables that were polluting the namespace; they have been replaced with inline strings or placed in functions as local variables
+- Multiple files have been modified to reduce namespace pollution:
+    - Added multiple functions across multiple files to organize the modules.
+    - Made other variables (like strings) into localized variables within functions.
+- Unfortunately, not all of these variables could be localized. For example, `GIT_ID_FILE` in [git.bashrc] could not reasonably be declared local. Likewise, `WSL_VER` has been retained, although it may be helpful to determine WSL version without needing to use Powershell.
 
 ## [0.3.3] - 2020-10-30
 ### Added
