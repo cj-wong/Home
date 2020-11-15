@@ -1,8 +1,8 @@
 # shellcheck shell=bash
 #
-# Companion script for: https://www.funtoo.org/Keychain
-
-EXCLUSIONS="${HOME}/.bashrc.d/keychain/exclusions.txt"
+# Companion script for:
+#   https://www.funtoo.org/Keychain
+# Keys may be excluded in .bashrc.d/keycdhain/exclusions.txt, one per line.
 
 # Load list of keys to exclude from .bashrc.d/keychain/exclusions.txt.
 # Only list file names, not fully qualified paths.
@@ -14,12 +14,15 @@ EXCLUSIONS="${HOME}/.bashrc.d/keychain/exclusions.txt"
 # Returns:
 #   0: if no errors occurred
 function keychain::load_exclusions() {
+    local exclusions
+    exclusions="${HOME}/.bashrc.d/keychain/exclusions.txt"
+
     KEYCHAIN_EXCLUDES=( )
 
-    if [ -f "$EXCLUSIONS" ]; then
+    if [ -f "$exclusions" ]; then
         while read -r excluded; do
             KEYCHAIN_EXCLUDES+=("$excluded")
-        done < "$EXCLUSIONS"
+        done < "$exclusions"
     fi
 
     export KEYCHAIN_EXCLUDES
@@ -32,23 +35,53 @@ function keychain::load_exclusions() {
 # Arguments:
 #   $1: a key to check; must only be the file name
 # Returns:
-#   0: if the key is not in the exclusion list
-#   1: if the key is to be excluded
-#   2: if $1 is empty
+#   0: if the key is to be excluded or doesn't exist or $1 is empty
+#   1: the key is not excluded
 function keychain::is_excluded() {
     if [ -z "$1" ]; then
-        echo "$1"
-        return 2
+        echo "\$1 is empty. Aborting keychain::is_excluded()." >&2
+        return 0
     fi
 
     local ex_key
     for ex_key in "${KEYCHAIN_EXCLUDES[@]}"; do
         if [[ "$ex_key" == "$1" ]]; then
-            return 1
+            echo "Excluded key: ${1}"
+            return 0
         fi
     done
 
-    return 0
+    return 1
+}
+
+# Load the keys and check whether they are excluded
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   all return codes: depends on eval and keychain
+function keychain::load_keys() {
+    local keys
+    keys=( )
+
+    keychain::load_exclusions
+
+    local pubkey
+    local privkey
+    local stemkey
+    for pubkey in ~/.ssh/*.pub; do
+        privkey="${pubkey%.pub}"
+        stemkey="${privkey##*/}"
+
+        if keychain::is_excluded "$stemkey"; then
+            continue
+        elif [ -f "$privkey" ]; then
+            keys+=("$privkey")
+        fi
+    done
+
+    eval "$(keychain --eval --agents ssh --clear "${keys[@]}")"
 }
 
 # Module-level code
@@ -59,21 +92,5 @@ elif [ -n "$SSH_CLIENT" ]; then
     echo "keychain will not start in SSH sessions." >&2
     echo "Aborting keychain.bashrc." >&2
 else
-    KEYS=( )
-
-    keychain::load_exclusions
-
-    for pubkey in ~/.ssh/*.pub; do
-        privkey="${pubkey%.pub}"
-        stemkey="${privkey##*/}"
-
-        if ! keychain::is_excluded "$stemkey"; then
-            echo "Excluded key: ${privkey}"
-            continue
-        elif [ -f "$privkey" ]; then
-            KEYS+=("$privkey")
-        fi
-    done
-
-    eval "$(keychain --eval --agents ssh --clear "${KEYS[@]}")"
+    keychain::load_keys
 fi
