@@ -13,7 +13,7 @@ EXCLUSIONS="${HOME}/.bashrc.d/keychain/exclusions.txt"
 #   None
 # Returns:
 #   0: if no errors occurred
-function load_exclusions() {
+function keychain::load_exclusions() {
     KEYCHAIN_EXCLUDES=( )
 
     if [ -f "$EXCLUSIONS" ]; then
@@ -35,7 +35,7 @@ function load_exclusions() {
 #   0: if the key is not in the exclusion list
 #   1: if the key is to be excluded
 #   2: if $1 is empty
-function is_excluded() {
+function keychain::is_excluded() {
     if [ -z "$1" ]; then
         echo "$1"
         return 2
@@ -56,17 +56,18 @@ function is_excluded() {
 if ! command -v keychain > /dev/null 2>&1; then
     echo "keychain is not installed. Aborting keychain.bashrc."
 elif [ -n "$SSH_CLIENT" ]; then
-    echo "keychain will not start in SSH sessions. Aborting keychain.bashrc."
+    echo "keychain will not start in SSH sessions." >&2
+    echo "Aborting keychain.bashrc." >&2
 else
     KEYS=( )
 
-    load_exclusions
+    keychain::load_exclusions
 
     for pubkey in ~/.ssh/*.pub; do
         privkey="${pubkey%.pub}"
         stemkey="${privkey##*/}"
 
-        if ! is_excluded "$stemkey"; then
+        if ! keychain::is_excluded "$stemkey"; then
             echo "Excluded key: ${privkey}"
             continue
         elif [ -f "$privkey" ]; then

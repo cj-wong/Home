@@ -12,19 +12,19 @@
 # Returns:
 #   0: if no errors occurred
 #   1: if a file ($1) was not supplied
-function copy_tmp() {
+function utils::copy_tmp() {
     # $1 must not be empty.
     if [ -z "$1" ]; then
-        echo "\$1 is empty; supply a file name. Aborting copy_tmp()."
+        echo "\$1 is empty; supply a file name. Aborting copy_tmp()." >&2
         return 1
     elif [ ! -f "$1" ]; then
-        echo "\$1 doesn't exist. You supplied '$1'".
+        echo "\$1 doesn't exist. You supplied '$1'." >&2
         return 1
     fi
 
     # $2 can be optional.
     if [ -z "$2" ]; then
-        echo "\$2 is empty; assuming \$HOME as directory."
+        echo "\$2 is empty; assuming \$HOME as directory." >&2
         local OUT_DIR="$HOME"
     else
         local OUT_DIR="$2"

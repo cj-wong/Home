@@ -6,8 +6,8 @@
 
 GIT_URL="git://github.com/trapd00r/LS_COLORS.git"
 ALREADY_EXISTS="LS_COLORS already exists. Do you want to delete it? [yN] "
-SHARE="$HOME/.local/share"
-FILE="$SHARE/lscolors.sh"
+SHARE="${HOME}/.local/share"
+FILE="${SHARE}/lscolors.sh"
 
 # Update the LS_COLORS local git repository and install new file
 # Arguments:
@@ -17,20 +17,20 @@ FILE="$SHARE/lscolors.sh"
 #   1: if ~/LS_COLORS could not be traversed/entered
 #   2: if popd would not work
 #   3: if `git pull` failed - could mean not a git repo or something else
-function lsc_update() {
+function lscolors::update() {
     echo "LS_COLORS update initiating..."
     if [ -d ~/LS_COLORS ]; then
         echo "LS_COLORS exists; trying to update its repository"
         pushd ~/LS_COLORS \
-            || (echo "Could not go into ~/LS_COLORS. Aborting." && return 1)
+            || (echo "Could not go into ~/LS_COLORS. Aborting." >&2 && return 1)
         if git pull > /dev/null; then
             bash install.sh && . "$FILE"
         else
-            echo "An error occurred; read the above message. Aborting."
+            echo "An error occurred; read the above message. Aborting." >&2
             return 3
         fi
         popd \
-            || (echo "Could not return to original directory. Aborting." \
+            || (echo "Could not return to original directory. Aborting." >&2 \
                 && return 2)
     fi
 }
@@ -57,7 +57,7 @@ else
                     && bash install.sh \
                     && . "$FILE"
             else
-                echo "Aborting removal and ls_colors.bashrc."
+                echo "Aborting removal and ls_colors.bashrc." >&2
             fi
         fi
     fi

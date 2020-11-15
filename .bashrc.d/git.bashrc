@@ -10,11 +10,11 @@
 # Returns:
 #   0: if the directory is a git repository
 #   1: not a git repository
-function git_is_repo() {
+function git::is_repo() {
     if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         return 0
     else
-        echo "This is not a git repository." 1>&2
+        echo "This is not a git repository." >&2
         return 1
     fi
 }
@@ -28,21 +28,22 @@ function git_is_repo() {
 #   0: if no errors occurred
 #   1: if a file ($2) was not supplied
 #   255: if not run within a git repository
-function git_specify_key() {
-    if ! git_is_repo; then
+function git::specify_key() {
+    if ! git::is_repo; then
         return 255
     elif [ -z "$1" ]; then
-        echo "\$1 is empty; supply a private key. Aborting git.bashrc."
+        echo "\$1 is empty; supply a private key. Aborting git.bashrc." >&2
         return 1
     elif [ ! -f "$1" ]; then
         local KEY="$HOME/.ssh/$1"
         if [ ! -f "$KEY" ]; then
-            echo "$1 is not a valid ssh private key."
-            echo "Please supply a name or location of the private key."
+            echo "$1 is not a valid ssh private key." >&2
+            echo "Please supply a name or location of the private key." >&2
             return 1
         fi
     else
-        local KEY="$1"
+        local KEY
+        KEY="$1"
     fi
 
     git config core.sshCommand "ssh -i $KEY"
@@ -56,7 +57,7 @@ function git_specify_key() {
 # Returns:
 #   0: if the command was run in a git repo
 #   255: if the command wasn't run in a git repo
-function git_show_identity() {
+function git::show_identity() {
     local GLOBAL_NAME
     local GLOBAL_EMAIL
     GLOBAL_NAME=$(git config --global user.name)
@@ -65,7 +66,7 @@ function git_show_identity() {
     echo "- Name: '${GLOBAL_NAME}'"
     echo "- Email: ${GLOBAL_EMAIL}"
     echo
-    if git_is_repo > /dev/null; then
+    if git::is_repo > /dev/null; then
         local CURRENT_NAME
         local CURRENT_EMAIL
         CURRENT_NAME=$(git config user.name)
@@ -80,8 +81,8 @@ function git_show_identity() {
             fi
         fi
     else
-        echo "Because you are not in a git repo,"
-        echo "you do not have a current identity."
+        echo "Because you are not in a git repo," >&2
+        echo "you do not have a current identity." >&2
         return 255
     fi
 }
@@ -93,7 +94,7 @@ function git_show_identity() {
 #   None
 # Returns:
 #   0: if no errors occurred
-function git_show_all_identities() {
+function git::show_all_identities() {
     local email
     for email in "${!IDENTITIES[@]}"; do
         echo "Name: '${IDENTITIES[${email}]}'"
@@ -112,12 +113,12 @@ function git_show_all_identities() {
 #   1: if a pattern ($1) was not supplied
 #   2: if the pattern matched multiple emails
 #   255: if not run in a git repository
-function git_specify_identity() {
-    if ! git_is_repo; then
+function git::specify_identity() {
+    if ! git::is_repo; then
         return 255
     elif [ -z "$1" ]; then
-        echo "\$1 is empty; supply an identity pattern."
-        echo "Aborting git_specify_identity()."
+        echo "\$1 is empty; supply an identity pattern." >&2
+        echo "Aborting git::specify_identity()." >&2
         return 1
     fi
 
@@ -128,8 +129,8 @@ function git_specify_identity() {
         grep "$1" <(echo "$email") > /dev/null 2>&1
         if grep "$1" <(echo "$email") > /dev/null 2>&1; then
             if [ -n "$matched_email" ]; then
-                echo "Your pattern ($1) matches too many emails."
-                echo "Aborting git_specify_identity()."
+                echo "Your pattern ($1) matches too many emails." >&2
+                echo "Aborting git::specify_identity()." >&2
                 return 2
             else
                 matched_email="$email"
@@ -154,31 +155,27 @@ function git_specify_identity() {
 #   1: if $1 was not supplied
 #   2: if an origin wasn't set already and user canceled adding $1 as new origin
 #   255: if not run within a git repository
-function git_add_origin() {
-    if ! git_is_repo; then
+function git::add_origin() {
+    if ! git::is_repo; then
         return 255
     elif [ -z "$1" ]; then
-        echo "\$1 is empty; supply a remote git repository."
-        echo "Aborting git_add_origin()."
+        echo "\$1 is empty; supply a remote git repository." >&2
+        echo "Aborting git::add_origin()." >&2
         return 1
     fi
 
     if git remote set-url --add --push origin "$1"; then
         :
     else
-        local e
-        e="$?"
-        if [[ "$e" == 128 ]]; then
-            # fatal: No such remote 'origin'
-            echo "No origin was set."
-            read -r -p "Do you want to set ${1} as your origin?" prompt
-            if [[ $prompt =~ ^[yY] ]]; then
-                git remote add origin "$1"
-                git remote set-url --add --push origin "$1"
-            else
-                echo "Aborting git_add_origin()."
-                return 2
-            fi
+        # fatal: No such remote 'origin'
+        echo "No origin was set." >&2
+        read -r -p "Do you want to set ${1} as your origin?" prompt
+        if [[ $prompt =~ ^[yY] ]]; then
+            git remote add origin "$1"
+            git remote set-url --add --push origin "$1"
+        else
+            echo "Aborting git::add_origin()." >&2
+            return 2
         fi
     fi
 
@@ -192,8 +189,8 @@ function git_add_origin() {
 #   0: if the origin was added successfully
 #   1: if the repository does not have a remote origin URL
 #   255: if not run within a git repository
-function git_readd_origin() {
-    if ! git_is_repo; then
+function git::readd_origin() {
+    if ! git::is_repo; then
         return 255
     fi
 
@@ -201,8 +198,8 @@ function git_readd_origin() {
     url=$(git config --local remote.origin.url)
 
     if [ -z "$url" ]; then
-        echo "No existing remote origin URL was found."
-        echo "Aborting git_seturl_origin()."
+        echo "No existing remote origin URL was found." >&2
+        echo "Aborting git::readd_origin()." >&2
         return 1
     else
         git remote set-url --add --push origin "$url"
@@ -227,8 +224,8 @@ else
         name=$(echo "$identity" | cut -d/ -f1)
         email=$(echo "$identity" | cut -d/ -f2)
         if [[ -z "$name" || -z "$email" ]]; then
-            echo "Skipping key pair with missing name or email."
-            echo "Reference: ${name}${email}"
+            echo "Skipping key pair with missing name or email." >&2
+            echo "Reference: ${name}${email}" >&2
             continue
         fi
         # Because names are less unique than email addresses,
