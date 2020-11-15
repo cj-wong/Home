@@ -18,10 +18,10 @@ else
         if ! echo "$vm" | grep "^\*" > /dev/null 2>&1; then
             continue
         else
-            wsl_ver=$(echo "$vm" | sed -E 's/^\* [A-Za-z ]+([12]).*$/\1/g')
+            WSL_VER=$(echo "$vm" | sed -E 's/^\* [A-Za-z ]+([12]).*$/\1/g')
             # WSL2 specific snippets:
             #   - setting display 
-            if [[ "$wsl_ver" == 2 ]]; then
+            if [[ "$WSL_VER" == 2 ]]; then
                 # Sets $DISPLAY for WSL GUI apps
                 # Adapted from:
                 #   https://techcommunity.microsoft.com/t5
