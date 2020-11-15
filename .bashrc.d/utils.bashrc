@@ -12,6 +12,7 @@
 # Returns:
 #   0: if no errors occurred
 #   1: if a file ($1) was not supplied
+#   any other integer: depends on mktemp and cp
 function utils::copy_tmp() {
     # $1 must not be empty.
     if [ -z "$1" ]; then
@@ -22,16 +23,18 @@ function utils::copy_tmp() {
         return 1
     fi
 
+    local out_dir
+
     # $2 can be optional.
     if [ -z "$2" ]; then
-        echo "\$2 is empty; assuming \$HOME as directory." >&2
-        local OUT_DIR="$HOME"
+        echo "\$2 is empty; assuming \$HOME as directory."
+        out_dir="$HOME"
     else
-        local OUT_DIR="$2"
+        out_dir="$2"
     fi
 
-    local OLD
-    OLD=$(mktemp -p "$OUT_DIR")
-    cp "$1" "$OLD"
-    echo "Saved ${1} to ${OLD}"
+    local old
+    old=$(mktemp -p "$out_dir")
+    cp "$1" "$old"
+    echo "Saved ${1} to ${old}"
 }
