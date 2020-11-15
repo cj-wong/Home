@@ -21,7 +21,7 @@ FILE_BLACKLIST=(
     "install.sh"
 )
 
-if ! type -t copy_tmp > /dev/null 2>&1; then
+if ! type -t "utils::copy_tmp" > /dev/null 2>&1; then
     . "$(dirname "$0")/.bashrc.d/utils.bashrc"
 fi
 
@@ -46,7 +46,7 @@ for file in * .[^.]*; do
             else
                 echo "${home_file} points to a different file."
                 echo "It will be moved."
-                copy_tmp "$home_file"
+                utils::copy_tmp "$home_file"
                 rm -f "$home_file"
             fi
         fi
