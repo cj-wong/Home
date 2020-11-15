@@ -2,6 +2,26 @@
 #
 # Utilities for Windows Subsystem for Linux
 
+# Sets the DISPLAY variable in WSL2 for GUI apps on Windows.
+# Globals:
+#   DISPLAY: the display to connect for GUI apps
+# Arguments:
+#   None
+# Returns:
+#   all return codes: depends on grep and sed
+function wsl2::display() {
+    # Sets $DISPLAY for WSL GUI apps
+    # Adapted from:
+    #   https://techcommunity.microsoft.com/t5
+    #       /windows-dev-appconsult
+    #       /running-wsl-gui-apps-on-windows-10/ba-p/1493242
+    DISPLAY=$(grep nameserver /etc/resolv.conf \
+        | sed 's/nameserver //'):0
+    export DISPLAY
+}
+
+# Module-level code
+
 if ! command -v wsl.exe > /dev/null 2>&1; then
     # Don't do anything if not WSL.
     :
@@ -22,14 +42,7 @@ else
             # WSL2 specific snippets:
             #   - setting display 
             if [[ "$WSL_VER" == 2 ]]; then
-                # Sets $DISPLAY for WSL GUI apps
-                # Adapted from:
-                #   https://techcommunity.microsoft.com/t5
-                #       /windows-dev-appconsult
-                #       /running-wsl-gui-apps-on-windows-10/ba-p/1493242
-                DISPLAY=$(grep nameserver /etc/resolv.conf \
-                    | sed 's/nameserver //'):0
-                export DISPLAY
+                wsl2::display
             fi
             # Since there should only be one VM marked with the asterisk,
             # stop the loop entirely.
