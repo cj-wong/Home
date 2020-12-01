@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.5] - UNRELEASED
+### Fixed
+- In [git.bashrc]:
+    - `git::specify_identity()` no longer sets identity if no matches were found.
+    - Removed extraneous call of `grep "$1" <(echo "$email") > /dev/null 2>&1`.
+    - After I had moved the identity reading code into its own function (`git::read_identities()`), the associatie array for identities stopped working. This is because Bash cannot export associate arrays from within functions. As a workaround, the array will be saved into a file and sourced immediately after.
+
 ## [0.3.4] - 2020-11-14
 ### Changed
 - Functions in [.bashrc.d](.bashrc.d) are now prefaced with their file name stem (e.g. `git::is_repo` from `git_is_repo`). This change was made in reference to [the Google Style Guide for Shell](https://google.github.io/styleguide/shellguide.html).

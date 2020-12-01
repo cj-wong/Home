@@ -112,6 +112,7 @@ function git::show_all_identities() {
 #   0: if a match was found and the identity was set
 #   1: if a pattern ($1) was not supplied
 #   2: if the pattern matched multiple emails
+#   3: if no identities were matched
 #   255: if not run in a git repository
 function git::specify_identity() {
     if ! git::is_repo; then
@@ -125,8 +126,8 @@ function git::specify_identity() {
     local email
     local matched_name
     local matched_email
+
     for email in "${!IDENTITIES[@]}"; do
-        grep "$1" <(echo "$email") > /dev/null 2>&1
         if grep "$1" <(echo "$email") > /dev/null 2>&1; then
             if [ -n "$matched_email" ]; then
                 echo "Your pattern ($1) matches too many emails." >&2
@@ -138,6 +139,11 @@ function git::specify_identity() {
             fi
         fi
     done
+
+    if [ -z "${matched_name+x}" ]; then
+        echo "Could not match any identities."
+        return 3
+    fi
 
     git config user.name "$matched_name"
     git config user.email "$matched_email"
@@ -211,6 +217,7 @@ function git::readd_origin() {
 }
 
 # Read identities from file and export them to an array.
+# It appears that the `-A` flag of `declare` is specific to GNU?
 # Globals:
 #   GIT_ID_FILE: JSON where the identities are stored
 #   IDENTITIES: an associative array with emails as keys and names as values
@@ -243,12 +250,17 @@ function git::read_identities() {
     # jq will concatenate the .name and .email fields with a '/'.
     done < <(jq -r -c '.[] | (.name + "/" + .email)' "$GIT_ID_FILE") 2>&1
 
-    export IDENTITIES
+    # Bash currently cannot export associative arrays. To bypass this,
+    # we can export the array to a file and then source it.
+    declare -p IDENTITIES > "$GIT_ID_SH"
+    . "$GIT_ID_SH"
 }
 
 # Module-level code
 
-GIT_ID_FILE="${HOME}/.bashrc.d/git/identities/identities.json"
+GIT_ID_DIR="${HOME}/.bashrc.d/git/identities"
+GIT_ID_SH="${GIT_ID_DIR}/identities.sh"
+GIT_ID_FILE="${GIT_ID_DIR}/identities.json"
 
 if ! command -v jq > /dev/null 2>&1; then
     echo "jq is not installed. Install jq to enable identity management."
@@ -257,4 +269,5 @@ elif [ ! -f "$GIT_ID_FILE" ]; then
     echo "Create one to enable identity management."
 else
     git::read_identities
+    export IDENTITIES
 fi
