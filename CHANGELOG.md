@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.6] - 2020-12-05
+### Added
+- Files that match patterns in `.gitignore` will no longer be linked to the home directory.
+
+### Changed
+- Mentions of "injection" have been replaced with the more appropriate "installation".
+
+### Fixed
+- Issue #2: the install text is now correctly detected within `.bashrc`.
+- Issue #1: `bashrc.d.sh` was merged into [install.sh] as it has little purpose outside of installation and the install script calls it anyway.
+
 ## [0.3.5] - 2020-11-30
 ### Fixed
 - In [git.bashrc]:
@@ -90,4 +101,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Initial version, based on my Pixelbook setup
 
+[install.sh]: install.sh
 [git.bashrc]: .bashrc.d/git.bashrc
