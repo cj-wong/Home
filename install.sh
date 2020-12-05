@@ -38,7 +38,7 @@ LAST_DIR=$(pwd)
 
 echo "Moving into ${REPO_DIR} ..."
 
-pushd "$REPO_DIR" \
+pushd "$REPO_DIR" > /dev/null \
     || (echo "Could not go into ${REPO_DIR}. Aborting." && exit 1)
 REPO_DIR=$(pwd)
 
@@ -59,22 +59,22 @@ fi
 if [[ $(< "${HOME}/.bashrc") != *"$INSTALL_BLOCK"* ]]; then
     echo ".bashrc.d functionality was not detected in your .bashrc file."
     echo "If installed, your old .bashrc will be saved to a temporary file."
-    read -r -p "Do you wish to install? [yN]" prompt
+    read -r -p "Do you wish to install? [yN] " prompt
     if [[ $prompt =~ ^[yY] ]]; then
         copy_tmp ~/.bashrc
         echo "$INSTALL_BLOCK" >> ~/.bashrc
         echo "Installed .bashrc.d into your .bashrc file. Restart shell to use."
     else
         echo "Aborting installation." >&2
-        popd || echo "Could not return to ${LAST_DIR}." >&2
+        popd > /dev/null || echo "Could not return to ${LAST_DIR}." >&2
         exit 1
     fi
 else
     echo ".bashrc.d functionality is already detected."
-    read -r -p "Continue with file linking? [yN]" prompt
+    read -r -p "Continue with file linking? [yN] " prompt
     if [[ ! $prompt =~ ^[yY] ]]; then
         echo "Aborting installation." >&2
-        popd || echo "Could not return to ${LAST_DIR}." >&2
+        popd > /dev/null || echo "Could not return to ${LAST_DIR}." >&2
         exit 2
     fi
 fi
@@ -107,7 +107,7 @@ for file in * .[^.]*; do
         echo "${file} is a file to be excluded. Skipping."
         continue
     elif pattern=$(is_file_gitignored "$file"); then
-        echo "${file} matches a pattern [${pattern}]. Skipping."
+        echo "${file} matches a pattern [${pattern}] in .gitignore. Skipping."
         continue
     fi
 
@@ -139,4 +139,4 @@ done
 echo "Changing repository directory permissions to 700."
 chmod 700 "$REPO_DIR"
 
-popd || cd "$LAST_DIR" || echo "Could not return to original directory."
+popd > /dev/null || cd "$LAST_DIR" || echo "Could not return to original directory."
