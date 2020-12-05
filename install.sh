@@ -7,6 +7,31 @@
 #   1: normal installation aborted
 #   2: partial installation aborted (.bashrc.d code block in .bashrc)
 
+# Checks whether a file should be excluded from linking by checking
+# contents of the project .gitignore.
+# Globals:
+#   EXCLUDE_GITIGNORE: an array of patterns in .gitignore; this array is only
+#       populated in the middle of this script so the function should not be
+#       called on its own elsewhere
+# Arguments:
+#   $1: the file to check
+# Returns:
+#   0: if the directory is a git repository
+#   1: the file is OK to be linked
+function is_file_gitignored() {
+    for ignore in "${EXCLUDE_GITIGNORE[@]}"; do
+        # shellcheck disable=SC2053
+        # This function specifically depends on wildcard matching and
+        # will not work when quoted.
+        if [[ "$1" == $ignore ]]; then
+            echo "$ignore"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 
 REPO_DIR=$(dirname "$0")
 LAST_DIR=$(pwd)
@@ -76,10 +101,13 @@ for file in * .[^.]*; do
     home_file="${HOME}/${file}"
     repo_file="${REPO_DIR}/${file}"
     if [[ -d "$file" && "${EXCLUDE_DIRS[*]}" =~ $file ]]; then
-        echo "${file} is in the blacklist for directories. Skipping."
+        echo "${file} is a directory to be excluded. Skipping."
         continue
     elif [[ -f "$file" && "${EXCLUDE_FILES[*]}" =~ $file ]]; then
-        echo "${file} is in the blacklist for files. Skipping."
+        echo "${file} is a file to be excluded. Skipping."
+        continue
+    elif pattern=$(is_file_gitignored "$file"); then
+        echo "${file} matches a pattern [${pattern}]. Skipping."
         continue
     fi
 
