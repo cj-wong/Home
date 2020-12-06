@@ -8,7 +8,7 @@
 # Arguments:
 #   None
 # Returns:
-#   all return codes: depends on grep and sed
+#   0: display was successfully exported
 function wsl2::display() {
     # Sets $DISPLAY for WSL GUI apps
     # Adapted from:

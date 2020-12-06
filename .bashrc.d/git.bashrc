@@ -8,8 +8,8 @@
 # Arguments:
 #   None
 # Returns:
-#   0: if the directory is a git repository
-#   1: not a git repository
+#   0: the directory is a git repository
+#   1: directory is not a git repository
 function git::is_repo() {
     if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         return 0
@@ -25,9 +25,9 @@ function git::is_repo() {
 # Arguments:
 #   $1: location or filename of the ssh private key
 # Returns:
-#   0: if no errors occurred
-#   1: if a file ($2) was not supplied
-#   255: if not run within a git repository
+#   0: the ssh key was successfully applied
+#   1: a file ($2) was not supplied
+#   255: not run within a git repository
 function git::specify_key() {
     if ! git::is_repo; then
         return 255
@@ -55,8 +55,8 @@ function git::specify_key() {
 # Arguments:
 #   None
 # Returns:
-#   0: if the command was run in a git repo
-#   255: if the command wasn't run in a git repo
+#   0: the command was run in a git repo
+#   255: the command wasn't run in a git repo
 function git::show_identity() {
     local global_name
     local global_email
@@ -93,7 +93,7 @@ function git::show_identity() {
 # Arguments:
 #   None
 # Returns:
-#   0: if no errors occurred
+#   0: no errors occurred
 function git::show_all_identities() {
     local email
     for email in "${!IDENTITIES[@]}"; do
@@ -109,11 +109,11 @@ function git::show_all_identities() {
 # Arguments:
 #   $1: a pattern that should match only one email address; must not be empty
 # Returns:
-#   0: if a match was found and the identity was set
-#   1: if a pattern ($1) was not supplied
-#   2: if the pattern matched multiple emails
-#   3: if no identities were matched
-#   255: if not run in a git repository
+#   0: the pattern matched a single email and the identity was set
+#   1: a pattern ($1) was not supplied
+#   2: the pattern matched multiple emails
+#   3: no identities were matched
+#   255: not run in a git repository
 function git::specify_identity() {
     if ! git::is_repo; then
         return 255
@@ -159,16 +159,16 @@ function git::specify_identity() {
 # Arguments:
 #   $1: a git remote repository
 # Returns:
-#   0: if the origin was added successfully
-#   1: if $1 was not supplied
-#   2: if an origin wasn't set already and user canceled adding $1 as new origin
-#   255: if not run within a git repository
-function git::add_origin() {
+#   0: the new remote was added successfully
+#   1: $1 was not supplied
+#   2: a remote wasn't set already and user canceled adding $1 as new remote
+#   255: not run within a git repository
+function git::add_remote() {
     if ! git::is_repo; then
         return 255
     elif [ -z "$1" ]; then
         echo "\$1 is empty; supply a remote git repository." >&2
-        echo "Aborting git::add_origin()." >&2
+        echo "Aborting git::add_remote()." >&2
         return 1
     fi
 
@@ -176,13 +176,13 @@ function git::add_origin() {
         :
     else
         # fatal: No such remote 'origin'
-        echo "No origin was set." >&2
-        read -r -p "Do you want to set ${1} as your origin?" prompt
+        echo "No remote origin was set." >&2
+        read -r -p "Do you want to set ${1} as your remote?" prompt
         if [[ $prompt =~ ^[yY] ]]; then
             git remote add origin "$1"
             git remote set-url --add --push origin "$1"
         else
-            echo "Aborting git::add_origin()." >&2
+            echo "Aborting git::add_remote()." >&2
             return 2
         fi
     fi
@@ -190,16 +190,20 @@ function git::add_origin() {
     return 0
 }
 
-# Add existing remote URL to pushurl for simultaneous pushes
+# Add existing remote URL to pushurl for simultaneous pushes.
+# Because simultaneous pushes use `set-url` instead of the default syntax,
+# the existing remote must be re-added for pushes to take effect.
+# Rather than have the user fetch the old remote again, it can be re-added
+# by retrieval from `git config --local remote.origin.url`.
 # Globals:
 #   None
 # Arguments:
 #   None
 # Returns:
-#   0: if the origin was added successfully
-#   1: if the repository does not have a remote origin URL
-#   255: if not run within a git repository
-function git::readd_origin() {
+#   0: the remote was added successfully
+#   1: the repository does not have a remote origin URL
+#   255: not run within a git repository
+function git::readd_remote() {
     if ! git::is_repo; then
         return 255
     fi
@@ -209,7 +213,7 @@ function git::readd_origin() {
 
     if [ -z "$url" ]; then
         echo "No existing remote origin URL was found." >&2
-        echo "Aborting git::readd_origin()." >&2
+        echo "Aborting git::readd_remote()." >&2
         return 1
     else
         git remote set-url --add --push origin "$url"
@@ -217,16 +221,15 @@ function git::readd_origin() {
 }
 
 # Read identities from file and export them to an array.
-# It appears that the `-A` flag of `declare` is specific to GNU?
+# It appears that the `-A` flag of `declare` is specific to GNU,
+# so this function may not work on POSIX-only.
 # Globals:
 #   GIT_ID_FILE: JSON where the identities are stored
 #   IDENTITIES: an associative array with emails as keys and names as values
 # Arguments:
 #   None
 # Returns:
-#   0: if the origin was added successfully
-#   1: if the repository does not have a remote origin URL
-#   255: if not run within a git repository
+#   0: the identities were read into environment variables
 function git::read_identities() {
     declare -A IDENTITIES
 

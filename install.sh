@@ -16,8 +16,8 @@
 # Arguments:
 #   $1: the file to check
 # Returns:
-#   0: if the directory is a git repository
-#   1: the file is OK to be linked
+#   0: the file should be ignored and not linked
+#   1: the file can be safely linked
 function is_file_gitignored() {
     for ignore in "${EXCLUDE_GITIGNORE[@]}"; do
         # shellcheck disable=SC2053

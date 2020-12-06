@@ -10,7 +10,7 @@
 # Arguments:
 #   None
 # Returns:
-#   any other integer: depends on source command
+#   0: the file could be successfully sourced
 function lscolors::source() {
     . "${HOME}/.local/share/lscolors.sh"
 }
@@ -21,7 +21,7 @@ function lscolors::source() {
 # Arguments:
 #   None
 # Returns:
-#   all return codes: depends on git
+#   0: the git clone succeeded
 function lscolors::download() {
     git clone "git://github.com/trapd00r/LS_COLORS.git" "$LSC_REPO_HOME"
 }
@@ -32,8 +32,9 @@ function lscolors::download() {
 # Arguments:
 #   None
 # Returns:
-#   1: could not enter "$LSC_REPO_HOME" or return to previous dir
-#   any other integer: depends on script and source command
+#   0: the install succeded
+#   1: "$LSC_REPO_HOME" could not be traversed via pushd
+#   2: could not return to previous directory via popd
 function lscolors::install() {
     if ! pushd "$LSC_REPO_HOME"; then
         echo "Could not go into ${LSC_REPO_HOME}. Aborting." >&2
@@ -44,7 +45,7 @@ function lscolors::install() {
     
     if ! popd; then
         echo "Could not return to previous directory"
-        return 1
+        return 2
     fi
 }
 
@@ -54,7 +55,7 @@ function lscolors::install() {
 # Arguments:
 #   None
 # Returns:
-#   0: if reinstall was accepted
+#   0: reinstall was accepted
 #   1: otherwise
 function lscolors::ask_reinstall() {
     local answer
@@ -72,10 +73,10 @@ function lscolors::ask_reinstall() {
 # Arguments:
 #   None
 # Returns:
-#   0: if the origin was added successfully
-#   1: if "$LSC_REPO_HOME" could not be traversed/entered
-#   2: if popd would not work
-#   3: if `git pull` failed - could mean not a git repo or something else
+#   0: the install and update succeeded
+#   1: "$LSC_REPO_HOME" could not be traversed via pushd
+#   2: could not return to previous directory via popd
+#   3: could not update via git-pull (may not be a git repo)
 function lscolors::update() {
     echo "LS_COLORS update initiating..."
     if [ -d "$LSC_REPO_HOME" ]; then
@@ -103,8 +104,8 @@ function lscolors::update() {
 # Arguments:
 #   None
 # Returns:
+#   0: the deletion was successful
 #   1: aborted deletion
-#   any other integer: depends on rm
 function lscolors::delete() {
     local answer
     local question
@@ -125,14 +126,13 @@ function lscolors::delete() {
 # Arguments:
 #   None
 # Returns:
-#   0: if deletion was accepted
+#   0: deletion was accepted
 #   1: otherwise
 function lscolors::ask_delete() {
     local answer
     local question
     question="LS_COLORS already exists. Do you want to delete it? [yN] "
-    read -r -p "$question" \
-        answer
+    read -r -p "$question" answer
     if [[ $answer =~ ^[yY] ]]; then
         return 0
     else

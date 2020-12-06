@@ -12,7 +12,7 @@
 # Arguments:
 #   None
 # Returns:
-#   0: if no errors occurred
+#   0: the key exclude list was loaded and exported successfully
 function keychain::load_exclusions() {
     local exclusions
     exclusions="${HOME}/.bashrc.d/keychain/exclusions.txt"
@@ -35,7 +35,7 @@ function keychain::load_exclusions() {
 # Arguments:
 #   $1: a key to check; must only be the file name
 # Returns:
-#   0: if the key is to be excluded or doesn't exist or $1 is empty
+#   0: the key is to be excluded or doesn't exist or $1 is empty
 #   1: the key is not excluded
 function keychain::is_excluded() {
     if [ -z "$1" ]; then
@@ -54,13 +54,13 @@ function keychain::is_excluded() {
     return 1
 }
 
-# Load the keys and check whether they are excluded
+# Load the keys and check whether they are excluded.
 # Globals:
 #   None
 # Arguments:
 #   None
 # Returns:
-#   all return codes: depends on eval and keychain
+#   0: the keys were loaded into keychain
 function keychain::load_keys() {
     local keys
     keys=( )

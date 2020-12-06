@@ -10,9 +10,8 @@
 #       must contain filename and directory
 #   $2: the directory to use; defaults to $HOME if empty
 # Returns:
-#   0: if no errors occurred
-#   1: if a file ($1) was not supplied
-#   any other integer: depends on mktemp and cp
+#   0: no errors occurred
+#   1: a file ($1) was not supplied
 function utils::copy_tmp() {
     # $1 must not be empty.
     if [ -z "$1" ]; then
