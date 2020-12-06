@@ -49,20 +49,22 @@ function lscolors::install() {
     fi
 }
 
-# Ask to reinstall LS_COLORS.
+# Ask to reinstall LS_COLORS, and reinstall if accepted.
 # Globals:
 #   None
 # Arguments:
 #   None
 # Returns:
-#   0: reinstall was accepted
-#   1: otherwise
-function lscolors::ask_reinstall() {
+#   0: reinstall was accepted and succeeded
+#   1: reinstall was aborted
+function lscolors::reinstall() {
     local answer
     read -r -p "Reinstall using existing LS_COLORS? [yN] " answer
     if [[ $answer =~ ^[yY] ]]; then
-        return 0
+        echo "Reinstalling..."
+        lscolors::install
     else
+        echo "Aborting reinstall." >&2
         return 1
     fi
 }
@@ -77,6 +79,7 @@ function lscolors::ask_reinstall() {
 #   1: "$LSC_REPO_HOME" could not be traversed via pushd
 #   2: could not return to previous directory via popd
 #   3: could not update via git-pull (may not be a git repo)
+#   4: the directory (git repo) does not exist
 function lscolors::update() {
     echo "LS_COLORS update initiating..."
     if [ -d "$LSC_REPO_HOME" ]; then
@@ -98,44 +101,33 @@ function lscolors::update() {
     fi
 }
 
-# Delete the LS_COLORS directory.
+# Ask to remove existing LS_COLORS directory, and delete if accepted.
 # Globals:
 #   None
 # Arguments:
 #   None
 # Returns:
 #   0: the deletion was successful
-#   1: aborted deletion
+#   1: deletion was aborted
 function lscolors::delete() {
     local answer
-    local question
-    question="Are you sure you really want to delete ${LSC_REPO_HOME}? [yN]"
-    read -r -p "$question" answer
-    if [[ $answer =~ ^[yY] ]]; then
-        echo "Removing LS_COLORS."
-        rm --recursive --force "$LSC_REPO_HOME"
-    else
+
+    echo "${LSC_REPO_HOME} already exists."
+    read -r -p "Do you want to delete it? [yN] " answer
+    if [[ ! $answer =~ ^[yY] ]]; then
         echo "Aborting deletion." >&2
         return 1
     fi
-}
 
-# Ask to remove existing LS_COLORS directory.
-# Globals:
-#   None
-# Arguments:
-#   None
-# Returns:
-#   0: deletion was accepted
-#   1: otherwise
-function lscolors::ask_delete() {
-    local answer
-    local question
-    question="LS_COLORS already exists. Do you want to delete it? [yN] "
-    read -r -p "$question" answer
+    unset answer
+
+    echo "Are you sure you really want to delete ${LSC_REPO_HOME}?"
+    read -r -p "[yN] " answer
     if [[ $answer =~ ^[yY] ]]; then
-        return 0
+        echo "Removing ${LSC_REPO_HOME}."
+        rm --recursive --force "$LSC_REPO_HOME"
     else
+        echo "Aborting deletion." >&2
         return 1
     fi
 }
@@ -151,10 +143,10 @@ else
     # LS_COLORS depends on ~/.local/share existing.
     mkdir --parents "${HOME}/.local/share"
     if [ -d "$LSC_REPO_HOME" ]; then
-        if lscolors::ask_delete; then
-            lscolors::delete && lscolors::download && lscolors::install
-        elif lscolors::ask_reinstall; then
-            lscolors::install
+        if lscolors::delete; then
+            lscolors::download && lscolors::install
+        elif lscolors::reinstall; then
+            :
         else
             echo "Aborting ls_colors.bashrc." >&2
         fi
