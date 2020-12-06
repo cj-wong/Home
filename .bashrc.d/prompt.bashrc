@@ -10,7 +10,9 @@ nocolor='\[\033[00m\]'
 # Workaround for Anaconda's (mini)conda. Combines into $chroot var if present.
 # Conda envs add to the beginning of the prompt, e.g. '(base) x$' where 'x$' is
 # the original prompt.
-conda_env=$(echo "$PS1" | cut -d' ' -f1 | grep -E '^\(.+\)')
+conda_env=$(echo "$PS1" \
+    | cut --delimiter=' ' --fields=1 \
+    | grep --extended-regexp '^\(.+\)')
 if [ -n "${conda_env}" ]; then
     chroot="${conda_env} ${chroot}"
 fi

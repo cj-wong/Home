@@ -38,7 +38,8 @@ else
         if ! echo "$vm" | grep "^\*" > /dev/null 2>&1; then
             continue
         else
-            WSL_VER=$(echo "$vm" | sed -E 's/^\* [A-Za-z ]+([12]).*$/\1/g')
+            WSL_VER=$(echo "$vm" \
+                | sed --regexp-extended 's/^\* [A-Za-z ]+([12]).*$/\1/g')
             # WSL2 specific snippets:
             #   - setting display 
             if [[ "$WSL_VER" == 2 ]]; then
@@ -48,5 +49,5 @@ else
             # stop the loop entirely.
             break
         fi
-    done < <(wsl.exe -l -v | tail -n+2)
+    done < <(wsl.exe --list --verbose | tail -n+2)
 fi

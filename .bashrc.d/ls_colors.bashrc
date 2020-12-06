@@ -113,7 +113,7 @@ function lscolors::delete() {
     read -r -p "$question" answer
     if [[ $answer =~ ^[yY] ]]; then
         echo "Removing LS_COLORS."
-        rm -rf "$LSC_REPO_HOME"
+        rm --recursive --force "$LSC_REPO_HOME"
     else
         echo "Aborting deletion." >&2
         return 1
@@ -149,7 +149,7 @@ if [ -f "${HOME}/.local/share/lscolors.sh" ]; then
 # If LS_COLORS wasn't installed, try installing it.
 else
     # LS_COLORS depends on ~/.local/share existing.
-    mkdir -p "${HOME}/.local/share"
+    mkdir --parents "${HOME}/.local/share"
     if [ -d "$LSC_REPO_HOME" ]; then
         if lscolors::ask_delete; then
             lscolors::delete && lscolors::download && lscolors::install

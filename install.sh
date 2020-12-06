@@ -121,16 +121,16 @@ for file in * .[^.]*; do
                 echo "${home_file} points to a different file."
                 echo "It will be moved."
                 utils::copy_tmp "$home_file"
-                rm -f "$home_file"
+                rm --force "$home_file"
             fi
         fi
     elif [ -e "$home_file" ]; then
         echo "${home_file} exists and will be moved."
         copy_tmp "$home_file"
         echo "Removing ${home_file}..."
-        rm -rf "$home_file"
+        rm --recursive --force "$home_file"
     fi
-    ln -s "$repo_file" ~
+    ln --symbolic "$repo_file" ~
 done
 
 echo "Changing repository directory permissions to 700."

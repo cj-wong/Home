@@ -32,7 +32,7 @@ function utils::copy_tmp() {
     fi
 
     local tmp
-    tmp=$(mktemp --tmpdir="$out_dir" -d)
+    tmp=$(mktemp --tmpdir="$out_dir" --directory)
     # Even for regular files, the recursive flag should be fine.
     cp --recursive "$1" "$tmp"
     echo "Saved ${1} to ${tmp}"
