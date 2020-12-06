@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Resolved #4; in [ls_colors.bashrc]:
     - `lscolors::ask_delete()` functionality moved into `lscolors::delete()` and module calls new delete only
     - `lscolors::ask_reinstall()` renamed `lscolors::reinstall()` and calls `lscolors::install()`
+- In [git.bashrc], functions and strings that referenced `origin` were renamed to `remote` or `remote origin`. This is more consistent with what the functions manipulate.
 
 ### Fixed
 - In [git.bashrc], `git::read_identities()` now lets users know how to reload identities. Because currently Bash functions cannot export associative arrays, the function must tell the user to source the file manually. This function should only be used sparingly outside of a fresh terminal, as the extra source command is required for a reload of identities.
