@@ -240,8 +240,8 @@ function git::read_identities() {
     while read -r identity; do
         # With the concatenation separator (see below), we can extract
         # the name and email of this pair.
-        name=$(echo "$identity" | cut -d/ -f1)
-        email=$(echo "$identity" | cut -d/ -f2)
+        name=$(echo "$identity" | cut --delimiter=/ --fields=1)
+        email=$(echo "$identity" | cut --delimiter=/ --fields=2)
         if [[ -z "$name" || -z "$email" ]]; then
             echo "Skipping key pair with missing name or email." >&2
             echo "Reference: ${name}${email}" >&2
@@ -251,12 +251,17 @@ function git::read_identities() {
         # email is the key for the associative array.
         IDENTITIES["$email"]="$name"
     # jq will concatenate the .name and .email fields with a '/'.
-    done < <(jq -r -c '.[] | (.name + "/" + .email)' "$GIT_ID_FILE") 2>&1
+    done < <(jq --raw-output --compact-output \
+        '.[] | (.name + "/" + .email)' "$GIT_ID_FILE") 2>&1
 
     # Bash currently cannot export associative arrays. To bypass this,
     # we can export the array to a file and then source it.
     declare -p IDENTITIES > "$GIT_ID_SH"
-    . "$GIT_ID_SH"
+
+    # Tell user to manually source the new file, since this function
+    # cannot load identities itself.
+    echo "To reload your identities, run this command:" >&2
+    echo ". ${GIT_ID_SH}" >&2
 }
 
 # Module-level code
@@ -271,6 +276,6 @@ elif [ ! -f "$GIT_ID_FILE" ]; then
     echo "identities.json doesn't exist in ${HOME}/.bashrc.d/git/identities/."
     echo "Create one to enable identity management."
 else
-    git::read_identities
-    export IDENTITIES
+    git::read_identities 2> /dev/null
+    . "$GIT_ID_SH" && export IDENTITIES
 fi
