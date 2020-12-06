@@ -260,8 +260,8 @@ function git::read_identities() {
 
     # Tell user to manually source the new file, since this function
     # cannot load identities itself.
-    echo "To reload your identities, run this command:" >&2
-    echo ". ${GIT_ID_SH}" >&2
+    echo "To reload your identities, run this command:"
+    echo ". ${GIT_ID_SH}"
 }
 
 # Module-level code
@@ -276,6 +276,6 @@ elif [ ! -f "$GIT_ID_FILE" ]; then
     echo "identities.json doesn't exist in ${HOME}/.bashrc.d/git/identities/."
     echo "Create one to enable identity management."
 else
-    git::read_identities 2> /dev/null
+    git::read_identities > /dev/null
     . "$GIT_ID_SH" && export IDENTITIES
 fi
