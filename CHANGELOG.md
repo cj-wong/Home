@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.7] - 2020-12-06
+### Changed
+- Resolved #3; `utils::copy_tmp()` should now work with directories as well.
+
+### Fixed
+- In [git.bashrc], `git::read_identities()` now lets users know how to reload identities. Because currently Bash functions cannot export associative arrays, the function must tell the user to source the file manually. This function should only be used sparingly outside of a fresh terminal, as the extra source command is required for a reload of identities.
+
 ## [0.3.6] - 2020-12-05
 ### Added
 - Files that match patterns in `.gitignore` will no longer be linked to the home directory.
