@@ -2,22 +2,21 @@
 #
 # Utility functions and settings
 
-# Copies a file to a temporary location, given a directory and filename.
+# Copies a file or directory to a temporary location.
 # Globals:
 #   None
 # Arguments:
-#   $1: location of the file to copy to a temporary location;
-#       must contain filename and directory
-#   $2: the directory to use; defaults to $HOME if empty
+#   $1: a file or directory to be copied into 
+#   $2: the parent directory to use; defaults to $HOME if empty
 # Returns:
-#   0: no errors occurred
-#   1: a file ($1) was not supplied
+#   0: $1 was successfully copied to a temporary location
+#   1: $1 was not supplied
 function utils::copy_tmp() {
     # $1 must not be empty.
     if [ -z "$1" ]; then
         echo "\$1 is empty; supply a file name. Aborting copy_tmp()." >&2
         return 1
-    elif [ ! -f "$1" ]; then
+    elif [ ! -e "$1" ]; then
         echo "\$1 doesn't exist. You supplied '$1'." >&2
         return 1
     fi
@@ -32,8 +31,9 @@ function utils::copy_tmp() {
         out_dir="$2"
     fi
 
-    local old
-    old=$(mktemp -p "$out_dir")
-    cp "$1" "$old"
-    echo "Saved ${1} to ${old}"
+    local tmp
+    tmp=$(mktemp --tmpdir="$out_dir" -d)
+    # Even for regular files, the recursive flag should be fine.
+    cp --recursive "$1" "$tmp"
+    echo "Saved ${1} to ${tmp}"
 }

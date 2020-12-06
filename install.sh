@@ -124,14 +124,11 @@ for file in * .[^.]*; do
                 rm -f "$home_file"
             fi
         fi
-    elif [ -d "$home_file" ]; then
-        tmp=$(mktemp -p ~ -d)
-        echo "${home_file} exists and will be moved to ${tmp}."
-        mv "$home_file" "$tmp"
     elif [ -e "$home_file" ]; then
-        echo "${home_file} exists as a file and will be moved."
+        echo "${home_file} exists and will be moved."
         copy_tmp "$home_file"
-        rm -f "$home_file"
+        echo "Removing ${home_file}..."
+        rm -rf "$home_file"
     fi
     ln -s "$repo_file" ~
 done
