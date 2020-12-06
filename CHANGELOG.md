@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.3.7] - 2020-12-06
 ### Changed
 - Resolved #3; `utils::copy_tmp()` should now work with directories as well.
+- Resolved #4; in [ls_colors.bashrc]:
+    - `lscolors::ask_delete()` functionality moved into `lscolors::delete()` and module calls new delete only
+    - `lscolors::ask_reinstall()` renamed `lscolors::reinstall()` and calls `lscolors::install()`
 
 ### Fixed
 - In [git.bashrc], `git::read_identities()` now lets users know how to reload identities. Because currently Bash functions cannot export associative arrays, the function must tell the user to source the file manually. This function should only be used sparingly outside of a fresh terminal, as the extra source command is required for a reload of identities.
@@ -69,7 +72,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Versioning was slightly changed, with each major addition being a subversion bump instead of fix bump. (The `y` in `x.y.z` was increased, rather than the `z`.) e.g. the change on 2020-09-04 is now `0.2.0` rather than `0.1.2`.
-- [ls_colors.bashrc](.bashrc.d/ls_colors.bashrc) was slightly rearranged so that the conditional checks for file existence (inverted from what it was), so that the smaller block is first.
+- [ls_colors.bashrc] was slightly rearranged so that the conditional checks for file existence (inverted from what it was), so that the smaller block is first.
 
 ## [0.2.3] - 2020-09-21
 ### Changed
@@ -110,3 +113,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [install.sh]: install.sh
 [git.bashrc]: .bashrc.d/git.bashrc
+[ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
