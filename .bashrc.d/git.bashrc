@@ -177,7 +177,7 @@ function git::add_remote() {
     else
         # fatal: No such remote 'origin'
         echo "No remote origin was set." >&2
-        read -r -p "Do you want to set ${1} as your remote?" prompt
+        read -r -p "Do you want to set ${1} as your remote? [yN] " prompt
         if [[ $prompt =~ ^[yY] ]]; then
             git remote add origin "$1"
             git remote set-url --add --push origin "$1"
