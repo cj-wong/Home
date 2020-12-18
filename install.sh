@@ -45,9 +45,19 @@ REPO_DIR=$(pwd)
 INSTALL_BLOCK=$(cat <<END
 if [ -d ~/.bashrc.d ]; then
     for file in ~/.bashrc.d/*.bashrc; do
-        . "\$file"
+        if [[ \$file != */keychain.bashrc ]]; then
+            . "\$file"
+        fi
     done
+
+    # Note that if this source command is canceled, the remainder of the file
+    # will not be executed! Put any additional required configuration above
+    # this statement: \`if [ -d ~/.bashrc.d ]; then\`.
+    if [ -f ~/.bashrc.d/keychain.bashrc ]; then
+        . ~/.bashrc.d/keychain.bashrc
+    fi
 fi
+
 END
 )
 
