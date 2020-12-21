@@ -3,12 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.3.8] - 2020-12-20
+## [0.3.8] - 2020-12-21
 ### Added
 - Added human-readable units for `df` and `du` in [.bash_aliases].
+- Added more helpful messages when executing commands.
+- Added note in [install.sh] that `git` is a required command, in case Home was downloaded instead of cloned.
 
 ### Changed
 - Moved `psgrep()` and renamed to `utils::psgrep()` in [.bash_aliases] to [utils.bashrc], as `psgrep()` is not an alias.
+- Error messages, instead of saying `Aborting $function`, will now be prefaced with `Error:`. However, some messages routed through `stderr` may not be errors. For instance, a user responding `no` to a prompt will cancel the function/script (and send the message to `stderr`), but the message is not an error.
+    - Likewise, in module-level `.bashrc` code, some messages will not be errors when functionality is optional. For instance, [keychain.bashrc] will warn users if the session isn't through SSH and `keychain` isn't installed. However in SSH sessions, it will let the user know that `keychain` will not run (so, an error).
+    - Care should be taken when considering functions called by other functions: the error message *should* reference the function name of the function that encountered an error. For example, [utils.bashrc] functions should follow this rule, since other functions may call those utility functions.
+
+### Fixed
+- Added missing conditional to `lscolors::update`. Previously, if the directory didn't exist, the function would return 0 and not tell the user the directory was absent.
 
 ## [0.3.7] - 2020-12-06
 ### Changed
@@ -70,7 +78,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Syntax is now linted with `shellcheck`.
 
 ### Fixed
-- `copy_tmp()` from [utils.bashrc](.bashrc.d/utils.bashrc) was not being loaded correctly in [install.sh](install.sh). The install script now makes sure to source the utils file.
+- `copy_tmp()` from [utils.bashrc] was not being loaded correctly in [install.sh]. The install script now makes sure to source the utils file.
 - Switched from `whereis` to `command -v`, because `whereis` returns 0 even with nothing is found.
 
 ## [0.3.0] - 2020-10-18
@@ -96,7 +104,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added `git` identity [example](.bashrc.d/git/identities/example.json)
 
 ### Changed
-- Changed repo directory permission to 700 in [install](install.sh)
+- Changed repo directory permission to 700 in [install.sh]
 - Changed abort messages to specify which script or function was aborted
 
 ## [0.2.0] - 2020-09-04
@@ -122,5 +130,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 [.bash_aliases]: .bash_aliases
 [install.sh]: install.sh
 [git.bashrc]: .bashrc.d/git.bashrc
+[keychain.bashrc]: .bashrc.d/keychain.bashrc
 [ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
 [utils.bashrc]: .bashrc.d/utils.bashrc
