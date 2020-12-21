@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.8] - 2020-12-20
+### Added
+- Added human-readable units for `df` and `du` in [.bash_aliases].
+
+### Changed
+- Moved `psgrep()` and renamed to `utils::psgrep()` in [.bash_aliases] to [utils.bashrc], as `psgrep()` is not an alias.
+
 ## [0.3.7] - 2020-12-06
 ### Changed
 - Resolved #3; `utils::copy_tmp()` should now work with directories as well.
@@ -112,6 +119,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Initial version, based on my Pixelbook setup
 
+[.bash_aliases]: .bash_aliases
 [install.sh]: install.sh
 [git.bashrc]: .bashrc.d/git.bashrc
 [ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
+[utils.bashrc]: .bashrc.d/utils.bashrc
