@@ -37,3 +37,16 @@ function utils::copy_tmp() {
     cp --recursive "$1" "$tmp"
     echo "Saved ${1} to ${tmp}"
 }
+
+# Gets line-by-line of running processes matching arguments.
+# Globals:
+#   None
+# Arguments:
+#   $@: args to be fed to grep
+# Returns:
+#   status code dependent on piped commands
+function utils::psgrep() {
+    # shellcheck disable=SC2009
+    # The use of "$@" twice is somewhat hacky but evidently re-colorizes output.
+    ps aux | grep "$@" | grep --invert-match grep | grep "$@"
+}
