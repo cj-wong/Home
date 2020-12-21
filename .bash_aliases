@@ -6,6 +6,10 @@
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
+# human-readable units
+alias df='df -h'
+alias du='du -h'
+
 # ls
 alias lh='ls -h'
 alias ll='lh -alF'
