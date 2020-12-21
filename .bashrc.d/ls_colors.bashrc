@@ -23,6 +23,7 @@ function lscolors::source() {
 # Returns:
 #   0: the git clone succeeded
 function lscolors::download() {
+    echo "Downloading newest LS_COLORS into ${LSC_REPO_HOME}."
     git clone "git://github.com/trapd00r/LS_COLORS.git" "$LSC_REPO_HOME"
 }
 
@@ -32,19 +33,22 @@ function lscolors::download() {
 # Arguments:
 #   None
 # Returns:
-#   0: the install succeded
+#   0: the install succeeded
 #   1: "$LSC_REPO_HOME" could not be traversed via pushd
-#   2: could not return to previous directory via popd
+#   2: the install succeeded, but could not return to previous directory
+#      via popd
 function lscolors::install() {
+    echo "Beginning installation."
     if ! pushd "$LSC_REPO_HOME"; then
-        echo "Could not go into ${LSC_REPO_HOME}. Aborting." >&2
+        echo "Error: Could not go into ${LSC_REPO_HOME}." >&2
         return 1
     else
         bash install.sh && lscolors::source
+        echo "Installation was successful."
     fi
     
     if ! popd; then
-        echo "Could not return to previous directory"
+        echo "Error: Could not return to previous directory." >&2
         return 2
     fi
 }
@@ -64,7 +68,7 @@ function lscolors::reinstall() {
         echo "Reinstalling..."
         lscolors::install
     else
-        echo "Aborting reinstall." >&2
+        echo "Reinstall has been aborted." >&2
         return 1
     fi
 }
@@ -85,7 +89,7 @@ function lscolors::update() {
     if [ -d "$LSC_REPO_HOME" ]; then
         echo "LS_COLORS exists; trying to update its repository"
         if ! pushd "$LSC_REPO_HOME"; then
-            echo "Could not go into ${LSC_REPO_HOME}. Aborting." >&2
+            echo "Error: Could not go into ${LSC_REPO_HOME}." >&2
             return 1
         fi
         if git pull > /dev/null; then
@@ -93,15 +97,15 @@ function lscolors::update() {
             echo "Successfully updated LS_COLORS."
             return 0
         else
-            echo "An error occurred; read the above message. Aborting." >&2
+            echo "Error: Update failed. Read the message above for details." >&2
             return 3
         fi
         if ! popd; then
-            echo "Could not return to original directory. Aborting." >&2
+            echo "Error: Could not return to original directory." >&2
             return 2
         fi
     else
-        echo "LS_COLORS doesn't exist. Aborting lscolors::update()." >&2
+        echo "Error: LS_COLORS doesn't exist." >&2
         return 4
     fi
 }
@@ -120,7 +124,7 @@ function lscolors::delete() {
     echo "${LSC_REPO_HOME} already exists."
     read -r -p "Do you want to delete it? [yN] " answer
     if [[ ! $answer =~ ^[yY] ]]; then
-        echo "Aborting deletion." >&2
+        echo "Deletion has been aborted." >&2
         return 1
     fi
 
@@ -132,7 +136,7 @@ function lscolors::delete() {
         echo "Removing ${LSC_REPO_HOME}."
         rm --recursive --force "$LSC_REPO_HOME"
     else
-        echo "Aborting deletion." >&2
+        echo "Deletion has been aborted." >&2
         return 1
     fi
 }
@@ -148,12 +152,13 @@ else
     # LS_COLORS depends on ~/.local/share existing.
     mkdir --parents "${HOME}/.local/share"
     if [ -d "$LSC_REPO_HOME" ]; then
+        echo "LS_COLORS already exists but doesn't seem to be installed."
         if lscolors::delete; then
             lscolors::download && lscolors::install
         elif lscolors::reinstall; then
             :
         else
-            echo "Aborting ls_colors.bashrc." >&2
+            echo "Error: Reinstallation and/or deletion have been aborted." >&2
         fi
     fi
 fi

@@ -1,6 +1,8 @@
 # shellcheck shell=bash
 #
 # Utility functions and settings
+#
+# Error messages in this module _should_ include the name of the function.
 
 # Copies a file or directory to a temporary location.
 # Globals:
@@ -14,10 +16,10 @@
 function utils::copy_tmp() {
     # $1 must not be empty.
     if [ -z "$1" ]; then
-        echo "\$1 is empty; supply a file name. Aborting copy_tmp()." >&2
+        echo "Error [utils::copy_tmp]: \$1 is empty; supply a file name." >&2
         return 1
     elif [ ! -e "$1" ]; then
-        echo "\$1 doesn't exist. You supplied '$1'." >&2
+        echo "Error [utils::copy_tmp]: ${1} doesn't exist." >&2
         return 1
     fi
 
@@ -25,7 +27,7 @@ function utils::copy_tmp() {
 
     # $2 can be optional.
     if [ -z "$2" ]; then
-        echo "\$2 is empty; assuming \$HOME as directory."
+        echo "\$2 is empty; assuming \$HOME as parent directory."
         out_dir="$HOME"
     else
         out_dir="$2"
@@ -35,7 +37,7 @@ function utils::copy_tmp() {
     tmp=$(mktemp --tmpdir="$out_dir" --directory)
     # Even for regular files, the recursive flag should be fine.
     cp --recursive "$1" "$tmp"
-    echo "Saved ${1} to ${tmp}"
+    echo "Copied ${1} to ${tmp}."
 }
 
 # Gets line-by-line of running processes matching arguments.

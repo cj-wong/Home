@@ -2,6 +2,9 @@
 #
 # Set the prompt for bash.
 
+# shellcheck disable=SC2154
+# Although not referenced, $debian_chroot may not be empty. This line is taken
+# from the default .bashrc that ships with Debian and Ubuntu.
 chroot="${debian_chroot:+($debian_chroot)}"
 green='\[\033[01;32m\]'
 blue='\[\033[01;34m\]'

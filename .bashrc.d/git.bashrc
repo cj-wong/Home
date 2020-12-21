@@ -32,12 +32,12 @@ function git::specify_key() {
     if ! git::is_repo; then
         return 255
     elif [ -z "$1" ]; then
-        echo "\$1 is empty; supply a private key. Aborting git.bashrc." >&2
+        echo "Error: \$1 is empty; supply a private key." >&2
         return 1
     elif [ ! -f "$1" ]; then
         local KEY="$HOME/.ssh/$1"
         if [ ! -f "$KEY" ]; then
-            echo "$1 is not a valid ssh private key." >&2
+            echo "Error: $1 is not a valid ssh private key." >&2
             echo "Please supply a name or location of the private key." >&2
             return 1
         fi
@@ -46,6 +46,7 @@ function git::specify_key() {
         KEY="$1"
     fi
 
+    echo "Using ${KEY} for current repository."
     git config core.sshCommand "ssh -i $KEY"
 }
 
@@ -167,8 +168,7 @@ function git::add_remote() {
     if ! git::is_repo; then
         return 255
     elif [ -z "$1" ]; then
-        echo "\$1 is empty; supply a remote git repository." >&2
-        echo "Aborting git::add_remote()." >&2
+        echo "Error: \$1 is empty; supply a remote git repository." >&2
         return 1
     fi
 
@@ -182,7 +182,7 @@ function git::add_remote() {
             git remote add origin "$1"
             git remote set-url --add --push origin "$1"
         else
-            echo "Aborting git::add_remote()." >&2
+            echo "git::add_remote has been aborted." >&2
             return 2
         fi
     fi

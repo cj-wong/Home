@@ -14,6 +14,7 @@
 # Returns:
 #   0: the key exclude list was loaded and exported successfully
 function keychain::load_exclusions() {
+    echo "Loading list of keys to be excluded."
     local exclusions
     exclusions="${HOME}/.bashrc.d/keychain/exclusions.txt"
 
@@ -26,6 +27,7 @@ function keychain::load_exclusions() {
     fi
 
     export KEYCHAIN_EXCLUDES
+    echo "Exclusions have been loaded."
 }
 
 # Check whether a SSH key was excluded for use in keychain.
@@ -39,7 +41,7 @@ function keychain::load_exclusions() {
 #   1: the key is not excluded
 function keychain::is_excluded() {
     if [ -z "$1" ]; then
-        echo "\$1 is empty. Aborting keychain::is_excluded()." >&2
+        echo "Error: \$1 is empty." >&2
         return 0
     fi
 
@@ -62,6 +64,7 @@ function keychain::is_excluded() {
 # Returns:
 #   0: the keys were loaded into keychain
 function keychain::load_keys() {
+    echo "Loading keys from ~/.ssh."
     local keys
     keys=( )
 
@@ -86,11 +89,10 @@ function keychain::load_keys() {
 
 # Module-level code
 
-if ! command -v keychain > /dev/null 2>&1; then
-    echo "keychain is not installed. Aborting keychain.bashrc."
-elif [ -n "$SSH_CLIENT" ]; then
-    echo "keychain will not start in SSH sessions." >&2
-    echo "Aborting keychain.bashrc." >&2
+if [ -n "$SSH_CLIENT" ]; then
+    echo "Error: keychain will not start in SSH sessions." >&2
+elif ! command -v keychain > /dev/null 2>&1; then
+    echo "Warning: keychain is not installed." >&2
 else
     keychain::load_keys
 fi
