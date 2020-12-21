@@ -36,6 +36,10 @@ function is_file_gitignored() {
 REPO_DIR=$(dirname "$0")
 LAST_DIR=$(pwd)
 
+echo "Installation for Home will begin."
+echo "Note that while some external programs are necessary for some modules,"
+echo "only git is required for the project as a whole. Install git when needed."
+echo
 echo "Moving into ${REPO_DIR} ..."
 
 pushd "$REPO_DIR" > /dev/null \
@@ -63,7 +67,7 @@ END
 
 # If copy_tmp isn't available, source it from the utils file.
 if ! type -t "utils::copy_tmp" > /dev/null 2>&1; then
-    . "$(dirname "$0")/.bashrc.d/utils.bashrc"
+    . "${REPO_DIR}/.bashrc.d/utils.bashrc"
 fi
 
 if [[ $(< "${HOME}/.bashrc") != *"$INSTALL_BLOCK"* ]]; then
