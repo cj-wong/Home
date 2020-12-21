@@ -90,6 +90,8 @@ function lscolors::update() {
         fi
         if git pull > /dev/null; then
             bash install.sh && lscolors::source
+            echo "Successfully updated LS_COLORS."
+            return 0
         else
             echo "An error occurred; read the above message. Aborting." >&2
             return 3
@@ -98,6 +100,9 @@ function lscolors::update() {
             echo "Could not return to original directory. Aborting." >&2
             return 2
         fi
+    else
+        echo "LS_COLORS doesn't exist. Aborting lscolors::update()." >&2
+        return 4
     fi
 }
 
