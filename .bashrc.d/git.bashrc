@@ -236,12 +236,15 @@ function git::read_identities() {
     local identity
     local name
     local email
+    local delimiter
+
+    delimiter="/"
 
     while read -r identity; do
-        # With the concatenation separator (see below), we can extract
+        # With the concatenation separator ($delimiter), we can extract
         # the name and email of this pair.
-        name=$(echo "$identity" | cut --delimiter=/ --fields=1)
-        email=$(echo "$identity" | cut --delimiter=/ --fields=2)
+        name=$(echo "$identity" | cut --delimiter="$delimiter" --fields=1)
+        email=$(echo "$identity" | cut --delimiter="$delimiter" --fields=2)
         if [[ -z "$name" || -z "$email" ]]; then
             echo "Skipping key pair with missing name or email." >&2
             echo "Reference: ${name}${email}" >&2
@@ -250,12 +253,12 @@ function git::read_identities() {
         # Because names are less unique than email addresses,
         # email is the key for the associative array.
         IDENTITIES["$email"]="$name"
-    # jq will concatenate the .name and .email fields with a '/'.
+    # jq will concatenate the .name and .email fields with $delimiter above.
     done < <(jq --raw-output --compact-output \
-        '.[] | (.name + "/" + .email)' "$GIT_ID_FILE") 2>&1
+        ".[] | (.name + \"$delimiter\" + .email)" "$GIT_ID_FILE") 2>&1
 
-    # Bash currently cannot export associative arrays. To bypass this,
-    # we can export the array to a file and then source it.
+    # Bash currently cannot export associative arrays from within functions.
+    # To bypass this, we can export the array to a file and then source it.
     declare -p IDENTITIES > "$GIT_ID_SH"
 
     # Tell user to manually source the new file, since this function
