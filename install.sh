@@ -19,6 +19,7 @@
 #   0: the file should be ignored and not linked
 #   1: the file can be safely linked
 function is_file_gitignored() {
+    local ignore
     for ignore in "${EXCLUDE_GITIGNORE[@]}"; do
         # shellcheck disable=SC2053
         # This function specifically depends on wildcard matching and
