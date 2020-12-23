@@ -98,11 +98,14 @@ EXCLUDE_DIRS=(
 )
 
 EXCLUDE_FILES=(
+    ".gitattributes"
     ".gitignore"
     "install.sh"
     "LICENSE"
     "README.md"
 )
+
+EXCLUDE_GITIGNORE=( )
 
 while read -r line; do
     EXCLUDE_GITIGNORE+=("$line")
