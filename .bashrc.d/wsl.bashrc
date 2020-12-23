@@ -23,13 +23,15 @@ function wsl2::display() {
 
 # Module-level code
 
-if ! command -v wsl.exe > /dev/null 2>&1; then
+if ! home::app_is_installed wsl.exe 2> /dev/null; then
     # Don't do anything if not WSL.
+    # Unlike other home::app_is_installed checks, stderr must be redirected,
+    # because WSL not being installed is not a problem for most systems.
     :
 else
     # Pinpoint the exact running VM to determine WSL version.
-    # According to the docs, `wsl.exe -l -v` can fail if the Windows Build
-    # isn't 19041 or higher.
+    # According to the docs, `wsl.exe --list --verbose` can fail if
+    # the Windows Build isn't 19041 or higher.
     # Reference: https://docs.microsoft.com/en-us/windows/wsl/reference
     # This loop may be simplified by sorting the list, since the asterisk
     # will come first, but wsl.exe leaves an empty line that comes before

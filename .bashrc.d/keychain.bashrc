@@ -63,7 +63,11 @@ function keychain::is_excluded() {
 #   None
 # Returns:
 #   0: the keys were loaded into keychain
+#   255: keychain is not installed
 function keychain::load_keys() {
+    if ! home::app_is_installed keychain; then
+        return 255
+    fi
     echo "Loading keys from ~/.ssh."
     local keys
     keys=( )
@@ -91,7 +95,7 @@ function keychain::load_keys() {
 
 if [ -n "$SSH_CLIENT" ]; then
     echo "Error: keychain will not start in SSH sessions." >&2
-elif ! command -v keychain > /dev/null 2>&1; then
+elif ! home::app_is_installed keychain; then
     echo "Warning: keychain is not installed." >&2
 else
     keychain::load_keys

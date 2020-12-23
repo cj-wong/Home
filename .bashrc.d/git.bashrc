@@ -230,7 +230,12 @@ function git::readd_remote() {
 #   None
 # Returns:
 #   0: the identities were read into environment variables
+#   255: jq is not installed
 function git::read_identities() {
+    if ! home::app_is_installed jq; then
+        return 255
+    fi
+
     declare -A IDENTITIES
 
     local identity
@@ -273,11 +278,11 @@ GIT_ID_DIR="${HOME}/.bashrc.d/git/identities"
 GIT_ID_SH="${GIT_ID_DIR}/identities.sh"
 GIT_ID_FILE="${GIT_ID_DIR}/identities.json"
 
-if ! command -v jq > /dev/null 2>&1; then
-    echo "jq is not installed. Install jq to enable identity management."
+if ! home::app_is_installed jq; then
+    echo "Install jq to enable identity management." >&2
 elif [ ! -f "$GIT_ID_FILE" ]; then
-    echo "identities.json doesn't exist in ${HOME}/.bashrc.d/git/identities/."
-    echo "Create one to enable identity management."
+    echo "identities.json doesn't exist in ${GIT_ID_DIR}." >&2
+    echo "Create it to enable identity management." >&2
 else
     git::read_identities > /dev/null
     . "$GIT_ID_SH" && export IDENTITIES
