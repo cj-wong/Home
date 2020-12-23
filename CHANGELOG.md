@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.0] - 2020-12-22
+### Changed
+- Functions that require an installed program will now check in the beginning whether the program is installed.
+- Similarly, modules have had hard-coded program checks removed in place of a function (`home::app_is_installed()`) from [0.bashrc]. `0.bashrc` is intended to be a common configuration module for the other modules, hence why its name starts with `0` (sourced first according to sorted order).
+- In [git.bashrc], the delimiter in `git::read_identities()` is no longer hard-coded. It is declared in a local variable to the function.
+
 ## [0.3.8] - 2020-12-21
 ### Added
 - Added human-readable units for `df` and `du` in [.bash_aliases].
@@ -129,6 +135,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [.bash_aliases]: .bash_aliases
 [install.sh]: install.sh
+[0.bashrc]: .bashrc.d/0.bashrc
 [git.bashrc]: .bashrc.d/git.bashrc
 [keychain.bashrc]: .bashrc.d/keychain.bashrc
 [ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
