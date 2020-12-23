@@ -75,7 +75,7 @@ if [[ $(< "${HOME}/.bashrc") != *"$INSTALL_BLOCK"* ]]; then
     echo "If installed, your old .bashrc will be saved to a temporary file."
     read -r -p "Do you wish to install? [yN] " prompt
     if [[ $prompt =~ ^[yY] ]]; then
-        copy_tmp ~/.bashrc
+        utils::copy_tmp ~/.bashrc
         echo "$INSTALL_BLOCK" >> ~/.bashrc
         echo "Installed .bashrc.d into your .bashrc file. Restart shell to use."
     else
@@ -143,7 +143,7 @@ for file in * .[^.]*; do
         fi
     elif [ -e "$home_file" ]; then
         echo "${home_file} exists and will be moved."
-        copy_tmp "$home_file"
+        utils::copy_tmp "$home_file"
         echo "Removing ${home_file}..."
         rm --recursive --force "$home_file"
     fi
