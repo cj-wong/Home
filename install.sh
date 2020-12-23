@@ -150,4 +150,6 @@ done
 echo "Changing repository directory permissions to 700."
 chmod 700 "$REPO_DIR"
 
-popd > /dev/null || cd "$LAST_DIR" || echo "Could not return to original directory."
+popd > /dev/null \
+    || cd "$LAST_DIR" \
+    || (echo "Could not return to original directory." && exit 1)
