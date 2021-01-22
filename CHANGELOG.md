@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.1] - 2021-01-21
+### Changed
+- Added `#!/bin/false` shebang to all source-only scripts in [.bashrc.d]
+
 ## [0.4.0] - 2020-12-22
 ### Changed
 - Functions that require an installed program will now check in the beginning whether the program is installed.
@@ -98,42 +102,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.2.3] - 2020-09-21
 ### Changed
-- `keychain` should not run under SSH sessions now
+- [keychain.bashrc] should not run under SSH sessions now.
 
 ## [0.2.2] - 2020-09-15
 ### Added
-- Added `git` identity management [functions](.bashrc.d/git.bashrc)
-- Retroactively added this changelog
+- Added identity management for [git.bashrc].
+- Retroactively added this changelog.
 
 ## [0.2.1] - 2020-09-14
 ### Added
-- Added `git` identity [example](.bashrc.d/git/identities/example.json)
+- Added `git` identity [example](.bashrc.d/git/identities/example.json).
 
 ### Changed
-- Changed repo directory permission to 700 in [install.sh]
-- Changed abort messages to specify which script or function was aborted
+- Changed repo directory permission to 700 in [install.sh].
+- Changed abort messages to specify which script or function was aborted.
 
 ## [0.2.0] - 2020-09-04
 ### Added
-- Added [.bashrc.d](.bashrc.d/git.bashrc) functions for `git`, including specifying SSH key for git
+- Added [git.bashrc] functions, including specifying SSH key for git.
 
 ## [0.1.1] - 2020-09-02
 ### Added
-- Added documentation
-- Added `.bashrc.d` injection script
-- Added utility functions to `.bashrc.d`
+- Added documentation.
+- Added `.bashrc.d` injection script.
+- Added utility functions to `.bashrc.d`.
 
 ### Changed
-- Added missing handling of Anaconda's (mini)conda Python distribution
+- Added missing handling of Anaconda's (mini)conda Python distribution.
 
 ### Fixed
-- `exit`s removed, because they exit the shell
+- Removed `exit`s, because they exit the shell when sourced.
 
 ## [0.1.0] - 2020-09-01
 ### Added
-- Initial version, based on my Pixelbook setup
+- Initial version, based on my Pixelbook setup.
 
 [.bash_aliases]: .bash_aliases
+[.bashrc.d]: .bashrc.d
 [install.sh]: install.sh
 [0.bashrc]: .bashrc.d/0.bashrc
 [git.bashrc]: .bashrc.d/git.bashrc
