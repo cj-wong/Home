@@ -20,7 +20,7 @@
 # Returns:
 #   0: the key exclude list was loaded and exported successfully
 function keychain::load_exclusions() {
-    echo "Loading list of keys to be excluded."
+    echo "Loading list of keys to be excluded..." >&2
     local exclusions
     exclusions="${HOME}/.bashrc.d/keychain/exclusions.txt"
 
@@ -33,7 +33,7 @@ function keychain::load_exclusions() {
     fi
 
     export KEYCHAIN_EXCLUDES
-    echo "Exclusions have been loaded."
+    echo "Exclusions have been loaded." >&2
 }
 
 # Check whether a SSH key was excluded for use in keychain.
@@ -54,7 +54,7 @@ function keychain::is_excluded() {
     local ex_key
     for ex_key in "${KEYCHAIN_EXCLUDES[@]}"; do
         if [[ "$ex_key" == "$1" ]]; then
-            echo "Excluded key: ${1}"
+            echo "Excluded key: ${1}" >&2
             return 0
         fi
     done
@@ -74,7 +74,7 @@ function keychain::load_keys() {
     if ! home::app_is_installed keychain; then
         return 255
     fi
-    echo "Loading keys from ~/.ssh."
+    echo "Loading keys from ~/.ssh..." >&2
     local keys
     keys=( )
 

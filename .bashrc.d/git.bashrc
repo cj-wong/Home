@@ -47,7 +47,7 @@ function git::specify_key() {
         KEY="$1"
     fi
 
-    echo "Using ${KEY} for current repository."
+    echo "Using ${KEY} for current repository." >&2
     git config core.sshCommand "ssh -i $KEY"
 }
 
@@ -73,13 +73,13 @@ function git::show_identity() {
         local current_email
         current_name=$(git config user.name)
         current_email=$(git config user.email)
-        echo "Current identity"
-        echo "- Name: '${current_name}'"
-        echo "- Email: ${current_email}"
+        echo "Current identity" >&2
+        echo "- Name: '${current_name}'" >&2
+        echo "- Email: ${current_email}" >&2
         if [ "$global_name" = "$current_name" ]; then
             if [ "$global_email" = "$current_email" ]; then
-                echo
-                echo "The two identities are the same."
+                echo >&2
+                echo "The two identities are the same." >&2
             fi
         fi
     else
@@ -99,8 +99,8 @@ function git::show_identity() {
 function git::show_all_identities() {
     local email
     for email in "${!IDENTITIES[@]}"; do
-        echo "Name: '${IDENTITIES[${email}]}'"
-        echo "Email: ${email}"
+        echo "Name: '${IDENTITIES[${email}]}'" >&2
+        echo "Email: ${email}" >&2
         echo
     done
 }
@@ -143,16 +143,16 @@ function git::specify_identity() {
     done
 
     if [ -z "${matched_name+x}" ]; then
-        echo "Could not match any identities."
+        echo "Could not match any identities." >&2
         return 3
     fi
 
     git config user.name "$matched_name"
     git config user.email "$matched_email"
 
-    echo "Your current git identity has been set:"
-    echo "- Name: '${matched_name}'"
-    echo "- Email: ${matched_email}"
+    echo "Your current git identity has been set:" >&2
+    echo "- Name: '${matched_name}'" >&2
+    echo "- Email: ${matched_email}" >&2
 }
 
 # Add a new remote to a project for simultaneous pushes
@@ -269,8 +269,8 @@ function git::read_identities() {
 
     # Tell user to manually source the new file, since this function
     # cannot load identities itself.
-    echo "To reload your identities, run this command:"
-    echo ". ${GIT_ID_SH}"
+    echo "To reload your identities, run this command:" >&2
+    echo ". ${GIT_ID_SH}" >&2
 }
 
 # Module-level code

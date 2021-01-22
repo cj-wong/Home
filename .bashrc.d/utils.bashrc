@@ -28,7 +28,7 @@ function utils::copy_tmp() {
 
     # $2 can be optional.
     if [ -z "$2" ]; then
-        echo "\$2 is empty; assuming \$HOME as parent directory."
+        echo "\$2 is empty; assuming \$HOME as parent directory." >&2
         out_dir="$HOME"
     else
         out_dir="$2"
@@ -38,7 +38,7 @@ function utils::copy_tmp() {
     tmp=$(mktemp --tmpdir="$out_dir" --directory)
     # Even for regular files, the recursive flag should be fine.
     cp --recursive "$1" "$tmp"
-    echo "Copied ${1} to ${tmp}."
+    echo "Copied ${1} to ${tmp}." >&2
 }
 
 # Gets line-by-line of running processes matching arguments.

@@ -28,7 +28,7 @@ function lscolors::source() {
 # Returns:
 #   0: the git clone succeeded
 function lscolors::download() {
-    echo "Downloading newest LS_COLORS into ${LSC_REPO_HOME}."
+    echo "Downloading newest LS_COLORS into ${LSC_REPO_HOME}." >&2
     git clone "git://github.com/trapd00r/LS_COLORS.git" "$LSC_REPO_HOME"
 }
 
@@ -43,7 +43,7 @@ function lscolors::download() {
 #   2: the install succeeded, but could not return to previous directory
 #      via popd
 function lscolors::install() {
-    echo "Beginning installation."
+    echo "Beginning installation." >&2
     if ! pushd "$LSC_REPO_HOME"; then
         echo "Error: Could not go into ${LSC_REPO_HOME}." >&2
         return 1
@@ -70,7 +70,7 @@ function lscolors::reinstall() {
     local answer
     read -r -p "Reinstall using existing LS_COLORS? [yN] " answer
     if [[ $answer =~ ^[yY] ]]; then
-        echo "Reinstalling..."
+        echo "Reinstalling..." >&2
         lscolors::install
     else
         echo "Reinstall has been aborted." >&2
@@ -90,16 +90,16 @@ function lscolors::reinstall() {
 #   3: could not update via git-pull (may not be a git repo)
 #   4: the directory (git repo) does not exist
 function lscolors::update() {
-    echo "LS_COLORS update initiating..."
+    echo "LS_COLORS update initiating..." >&2
     if [ -d "$LSC_REPO_HOME" ]; then
-        echo "LS_COLORS exists; trying to update its repository"
+        echo "LS_COLORS exists; trying to update its repository" >&2
         if ! pushd "$LSC_REPO_HOME"; then
             echo "Error: Could not go into ${LSC_REPO_HOME}." >&2
             return 1
         fi
         if git pull > /dev/null; then
             bash install.sh && lscolors::source
-            echo "Successfully updated LS_COLORS."
+            echo "Successfully updated LS_COLORS." >&2
             return 0
         else
             echo "Error: Update failed. Read the message above for details." >&2
@@ -126,7 +126,7 @@ function lscolors::update() {
 function lscolors::delete() {
     local answer
 
-    echo "${LSC_REPO_HOME} already exists."
+    echo "${LSC_REPO_HOME} already exists." >&2
     read -r -p "Do you want to delete it? [yN] " answer
     if [[ ! $answer =~ ^[yY] ]]; then
         echo "Deletion has been aborted." >&2
@@ -135,7 +135,7 @@ function lscolors::delete() {
 
     unset answer
 
-    echo "Are you sure you really want to delete ${LSC_REPO_HOME}?"
+    echo "Are you sure you really want to delete ${LSC_REPO_HOME}?" >&2
     read -r -p "[yN] " answer
     if [[ $answer =~ ^[yY] ]]; then
         echo "Removing ${LSC_REPO_HOME}."
