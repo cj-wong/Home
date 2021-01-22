@@ -1,3 +1,4 @@
+#!/bin/false
 # shellcheck shell=bash
 #
 # Utilities for Windows Subsystem for Linux

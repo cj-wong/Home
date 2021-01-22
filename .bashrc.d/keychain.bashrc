@@ -1,8 +1,14 @@
+#!/bin/false
 # shellcheck shell=bash
+#
+# Helps manage SSH keys by using the keychain command.
+#
+# Keys may be excluded in .bashrc.d/keychain/exclusions.txt, one per line.
+# These keys are the file name only, and must only refer to the private key.
+# i.e. Remove .pub from the list items.
 #
 # Companion script for:
 #   https://www.funtoo.org/Keychain
-# Keys may be excluded in .bashrc.d/keycdhain/exclusions.txt, one per line.
 
 # Load list of keys to exclude from .bashrc.d/keychain/exclusions.txt.
 # Only list file names, not fully qualified paths.

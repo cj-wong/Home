@@ -1,3 +1,4 @@
+#!/bin/false
 # shellcheck shell=bash
 #
 # Functions (helper and shortcuts) for git

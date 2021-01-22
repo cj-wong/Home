@@ -1,3 +1,4 @@
+#!/bin/false
 # shellcheck shell=bash
 #
 # Set the prompt for bash.

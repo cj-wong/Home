@@ -1,7 +1,9 @@
+#!/bin/false
 # shellcheck shell=bash
 #
 # The first module to be sourced from .bashrc.d.
-# This is for shared configuration between modules.
+# This module contains shared configuration between modules and first-run 
+# checks.
 
 # Check whether an app (program) is installed.
 # Globals:

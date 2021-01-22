@@ -1,8 +1,13 @@
+#!/bin/false
 # shellcheck shell=bash
 #
-# Companion script for: https://github.com/trapd00r/LS_COLORS
-# Sets dircolors for the terminal by using an external repo. Clones the repo
-# if the files (repo) aren't locally found and given consent.
+# Manages and sets dircolors for the terminal by using trapd00r/LS_COLORS. 
+# Can also:
+# - clone the repo
+# - update the local repo
+# 
+# Companion script for:
+#   https://github.com/trapd00r/LS_COLORS
 
 # Source lscolors.sh.
 # Globals:
