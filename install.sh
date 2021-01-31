@@ -83,7 +83,6 @@ if [[ $(< "${HOME}/.bashrc") != *"$INSTALL_BLOCK"* ]]; then
         echo "Installed .bashrc.d into your .bashrc file. Restart shell to use."
     else
         echo "Aborting installation." >&2
-        popd > /dev/null || echo "Could not return to ${LAST_DIR}." >&2
         exit 1
     fi
 else
@@ -91,7 +90,6 @@ else
     read -r -p "Continue with file linking? [yN] " prompt
     if [[ ! $prompt =~ ^[yY] ]]; then
         echo "Aborting installation." >&2
-        popd > /dev/null || echo "Could not return to ${LAST_DIR}." >&2
         exit 2
     fi
 fi
@@ -152,7 +150,3 @@ for file in * .[^.]*; do
     fi
     ln --symbolic "$repo_file" ~
 done
-
-popd > /dev/null \
-    || cd "$LAST_DIR" \
-    || (echo "Could not return to original directory." && exit 1)
