@@ -21,7 +21,7 @@ function scanimage::load_default_args() {
     if ! home::app_is_installed jq; then
         return 1
     elif [[ ! -f "$file" ]]; then
-        echo "{file} doesn't exist." >&2
+        echo "${file} doesn't exist." >&2
         return 2
     fi
 
