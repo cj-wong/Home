@@ -41,13 +41,28 @@ function utils::copy_tmp() {
     echo "Copied ${1} to ${tmp}." >&2
 }
 
+# Make a directory given today's date relative to current directory.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   0: the directory could be created successfully
+function utils::mkdir_today() {
+    if mkdir "$(date +"%Y-%m-%d")"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Gets line-by-line of running processes matching arguments.
 # Globals:
 #   None
 # Arguments:
 #   $@: args to be fed to grep
 # Returns:
-#   status code dependent on piped commands
+#   0: process matched
 function utils::psgrep() {
     # shellcheck disable=SC2009
     # The use of "$@" twice is somewhat hacky but evidently re-colorizes output.
