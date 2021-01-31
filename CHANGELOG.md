@@ -3,9 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.0] - 2021-01-30
+### Added
+- Added a new function `utils::mkdir_today()` in [utils.bashrc] that creates a directory relative to the current directory named after the day's date in the format `%Y-%m-%d`.
+- Added new module [scanimage.bashrc] for helper functions for `scanimage` scanning.
+    - To add default arguments to use for `scanimage`, create a file `arguments.json` in [.bashrc.d/scanimage/arguments/](.bashrc.d/scanimage/arguments/).
+
 ## [0.4.1] - 2021-01-21
 ### Changed
-- Added `#!/bin/false` shebang to all source-only scripts in [.bashrc.d]
+- Added `#!/bin/false` shebang to all source-only scripts in [.bashrc.d]. Since all the scripts in [.bashrc.d] also lack execute permissions, the hope is to minimize the chance of executing the scripts, although `bash script.bashrc` will still work.
 
 ## [0.4.0] - 2020-12-22
 ### Changed
@@ -144,4 +150,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 [git.bashrc]: .bashrc.d/git.bashrc
 [keychain.bashrc]: .bashrc.d/keychain.bashrc
 [ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
+[scanimage.bashrc]: .bashrc.d/scanimage.bashrc
 [utils.bashrc]: .bashrc.d/utils.bashrc
