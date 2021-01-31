@@ -50,7 +50,7 @@ function utils::copy_tmp() {
 #   0: the current directory could be changed to one with the current date
 #   1: the directory could not be changed; the directory may not exist or
 #      the user has insufficient permissions to enter it
-function utils::cd_today() {
+function utils::today::cd() {
     if cd "$(date +"%Y-%m-%d")"; then
         return 0
     else
@@ -67,7 +67,7 @@ function utils::cd_today() {
 #   0: the directory could be created successfully
 #   1: the directory could not be created; the directory exists or another
 #      error has prevented the creation of the directory
-function utils::mkdir_today() {
+function utils::today::mkdir() {
     if mkdir "$(date +"%Y-%m-%d")"; then
         return 0
     else
