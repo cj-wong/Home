@@ -1,3 +1,4 @@
 [
-    "--resolution 300"
+    "--resolution",
+    "300"
 ]
