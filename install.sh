@@ -42,6 +42,9 @@ echo "only git is required for the project as a whole. Install git when needed."
 echo
 echo "Moving into ${REPO_DIR} ..."
 
+echo "Changing repository directory permissions to 700..."
+chmod 700 "$REPO_DIR"
+
 pushd "$REPO_DIR" > /dev/null \
     || (echo "Could not go into ${REPO_DIR}. Aborting." && exit 1)
 REPO_DIR=$(pwd)
@@ -149,9 +152,6 @@ for file in * .[^.]*; do
     fi
     ln --symbolic "$repo_file" ~
 done
-
-echo "Changing repository directory permissions to 700."
-chmod 700 "$REPO_DIR"
 
 popd > /dev/null \
     || cd "$LAST_DIR" \
