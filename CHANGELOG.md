@@ -5,9 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.5.0] - 2021-01-30
 ### Added
-- Added a new function `utils::mkdir_today()` in [utils.bashrc] that creates a directory relative to the current directory named after the day's date in the format `%Y-%m-%d`.
+- Added a new function `utils::today::mkdir()` in [utils.bashrc] that creates a directory relative to the current directory named after the day's date in the format `%Y-%m-%d`.
+- Added a new function counterpart to the aforementioned function, `utils::today::cd()`, which attempts to change current directory to one matching the day's date.
 - Added new module [scanimage.bashrc] for helper functions for `scanimage` scanning.
     - To add default arguments to use for `scanimage`, create a file `arguments.json` in [.bashrc.d/scanimage/arguments/](.bashrc.d/scanimage/arguments/).
+
+### Changed
+- Changed function docstrings in the following ways:
+    - Cleaned up invalid references.
+    - Changed verb tense in return comments to be past tense.
+
+### Removed
+- Removed `popd` calls in [install.sh], because directory changing only applies to the new subshell when running scripts.
 
 ## [0.4.1] - 2021-01-21
 ### Changed
