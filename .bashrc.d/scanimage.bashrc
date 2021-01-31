@@ -27,7 +27,7 @@ function scanimage::load_default_args() {
 
     while read -r argument; do
         SCANIMAGE_DEFAULT_ARGS+=("$argument")
-    done < <(jq ".[]" "$file")
+    done < <(jq --raw-output ".[]" "$file")
 
     export SCANIMAGE_DEFAULT_ARGS
 }
