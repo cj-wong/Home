@@ -67,7 +67,7 @@ function scanimage::scan_many() {
             read -r -p "Enter anything to scan page ${file_number}: " prompt
         done
         unset prompt
-        if not scanimage "${args[@]}" > "${file_number}.pnm"; then
+        if ! scanimage "${args[@]}" > "${file_number}.pnm"; then
             echo "Could not run scanimage...exiting."
             return 1
         fi
