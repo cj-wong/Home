@@ -56,7 +56,7 @@ function scanimage::scan_many() {
         args=( "${SCANIMAGE_DEFAULT_ARGS[@]}" )
     fi
 
-    trap "trap - SIGINT; return 0" SIGINT
+    trap "echo; trap - SIGINT; return 0" SIGINT
 
     file_number=1
     echo "To exit, hit Ctrl-C."
