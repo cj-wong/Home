@@ -41,6 +41,7 @@ function scanimage::load_default_args() {
 #       from scanimage/arguments/arguments.json will be ignored
 # Returns:
 #   0: scans completed successfully
+#   1: scanimage could not run; this is most likely due to incorrect args
 function scanimage::scan_many() {
     local args
     local file_number # File number starting at 1; increments per loop
@@ -59,14 +60,17 @@ function scanimage::scan_many() {
     trap "echo; trap - SIGINT; return 0" SIGINT
 
     file_number=1
-    echo "To exit, hit Ctrl-C."
+    echo "To exit, hit Ctrl-C." >&2
     while true; do
         # Prevent unintended Enter key presses to ensure scan is intended
         while [[ -z "${prompt}" ]]; do
             read -r -p "Enter anything to scan page ${file_number}: " prompt
         done
         unset prompt
-        scanimage "${args[@]}" > "${file_number}.pnm"
+        if not scanimage "${args[@]}" > "${file_number}.pnm"; then
+            echo "Could not run scanimage...exiting."
+            return 1
+        fi
         ((file_number++))
     done
 }
