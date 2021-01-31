@@ -47,8 +47,8 @@ function utils::copy_tmp() {
 # Arguments:
 #   None
 # Returns:
-#   0: the current directory could be changed to one with the current date
-#   1: the directory could not be changed; the directory may not exist or
+#   0: the current directory was changed to one with the current date
+#   1: the directory wasn't able to be changed; the directory may not exist or
 #      the user has insufficient permissions to enter it
 function utils::today::cd() {
     if cd "$(date +"%Y-%m-%d")"; then
@@ -64,8 +64,8 @@ function utils::today::cd() {
 # Arguments:
 #   None
 # Returns:
-#   0: the directory could be created successfully
-#   1: the directory could not be created; the directory exists or another
+#   0: the directory was created successfully
+#   1: the directory wasn't able to be created; the directory exists or another
 #      error has prevented the creation of the directory
 function utils::today::mkdir() {
     if mkdir "$(date +"%Y-%m-%d")"; then
@@ -81,7 +81,7 @@ function utils::today::mkdir() {
 # Arguments:
 #   $@: args to be fed to grep
 # Returns:
-#   0: process matched
+#   0: the pattern matched process(es)
 function utils::psgrep() {
     # shellcheck disable=SC2009
     # The use of "$@" twice is somewhat hacky but evidently re-colorizes output.

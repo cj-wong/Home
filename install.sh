@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
-# Installs core files in Home to user home.
-# As a pre-run condition, runs ./bashrc.d.sh.
+# Installs core files in Home to user home by sym-linking.
 #
 # Exit codes:
 #   1: normal installation aborted
@@ -16,8 +15,8 @@
 # Arguments:
 #   $1: the file to check
 # Returns:
-#   0: the file should be ignored and not linked
-#   1: the file can be safely linked
+#   0: the file was to be ignored and not linked
+#   1: the file was able to be safely linked
 function is_file_gitignored() {
     local ignore
     for ignore in "${EXCLUDE_GITIGNORE[@]}"; do

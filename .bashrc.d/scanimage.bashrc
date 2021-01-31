@@ -41,7 +41,7 @@ function scanimage::load_default_args() {
 #       from scanimage/arguments/arguments.json will be ignored
 # Returns:
 #   0: scans completed successfully
-#   1: scanimage could not run; this is most likely due to incorrect args
+#   1: scanimage wasn't able to run; this is most likely due to incorrect args
 function scanimage::scan_many() {
     local args
     local file_number # File number starting at 1; increments per loop

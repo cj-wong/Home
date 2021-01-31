@@ -15,7 +15,7 @@
 # Arguments:
 #   None
 # Returns:
-#   0: the file could be successfully sourced
+#   0: the file was successfully sourced
 function lscolors::source() {
     . "${HOME}/.local/share/lscolors.sh"
 }
@@ -39,8 +39,8 @@ function lscolors::download() {
 #   None
 # Returns:
 #   0: the install succeeded
-#   1: "$LSC_REPO_HOME" could not be traversed via pushd
-#   2: the install succeeded, but could not return to previous directory
+#   1: "$LSC_REPO_HOME" wasn't traversable via pushd
+#   2: the install succeeded, but wasn't able to return to previous directory
 #      via popd
 function lscolors::install() {
     echo "Beginning installation." >&2
@@ -85,10 +85,10 @@ function lscolors::reinstall() {
 #   None
 # Returns:
 #   0: the install and update succeeded
-#   1: "$LSC_REPO_HOME" could not be traversed via pushd
-#   2: could not return to previous directory via popd
-#   3: could not update via git-pull (may not be a git repo)
-#   4: the directory (git repo) does not exist
+#   1: "$LSC_REPO_HOME" wasn't traversable via pushd
+#   2: wasn't able to return to previous directory via popd
+#   3: wasn't able to update via git-pull (may not be a git repo)
+#   4: the directory (git repo) didn't exist
 function lscolors::update() {
     echo "LS_COLORS update initiating..." >&2
     if [ -d "$LSC_REPO_HOME" ]; then
@@ -116,13 +116,14 @@ function lscolors::update() {
 }
 
 # Ask to remove existing LS_COLORS directory, and delete if accepted.
+# Ask twice to be sure about deletion.
 # Globals:
 #   None
 # Arguments:
 #   None
 # Returns:
-#   0: the deletion was successful
-#   1: deletion was aborted
+#   0: the deletion succeeded
+#   1: the deletion was aborted
 function lscolors::delete() {
     local answer
 

@@ -9,8 +9,8 @@
 # Arguments:
 #   None
 # Returns:
-#   0: the directory is a git repository
-#   1: directory is not a git repository
+#   0: the directory was a git repository
+#   1: the directory wasn't a git repository
 function git::is_repo() {
     if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         return 0
@@ -27,8 +27,8 @@ function git::is_repo() {
 #   $1: location or filename of the ssh private key
 # Returns:
 #   0: the ssh key was successfully applied
-#   1: a file ($2) was not supplied
-#   255: not run within a git repository
+#   1: a file ($2) wasn't supplied
+#   255: wasn't run within a git repository
 function git::specify_key() {
     if ! git::is_repo; then
         return 255
@@ -58,7 +58,7 @@ function git::specify_key() {
 #   None
 # Returns:
 #   0: the command was run in a git repo
-#   255: the command wasn't run in a git repo
+#   255: wasn't run in a git repository
 function git::show_identity() {
     local global_name
     local global_email
@@ -95,7 +95,7 @@ function git::show_identity() {
 # Arguments:
 #   None
 # Returns:
-#   0: no errors occurred
+#   0: the identities, if any, were printed
 function git::show_all_identities() {
     local email
     for email in "${!IDENTITIES[@]}"; do
@@ -112,10 +112,10 @@ function git::show_all_identities() {
 #   $1: a pattern that should match only one email address; must not be empty
 # Returns:
 #   0: the pattern matched a single email and the identity was set
-#   1: a pattern ($1) was not supplied
+#   1: a pattern ($1) wasn't supplied
 #   2: the pattern matched multiple emails
 #   3: no identities were matched
-#   255: not run in a git repository
+#   255: wasn't run in a git repository
 function git::specify_identity() {
     if ! git::is_repo; then
         return 255
@@ -162,9 +162,9 @@ function git::specify_identity() {
 #   $1: a git remote repository
 # Returns:
 #   0: the new remote was added successfully
-#   1: $1 was not supplied
+#   1: $1 wasn't supplied
 #   2: a remote wasn't set already and user canceled adding $1 as new remote
-#   255: not run within a git repository
+#   255: wasn't run within a git repository
 function git::add_remote() {
     if ! git::is_repo; then
         return 255
@@ -202,8 +202,8 @@ function git::add_remote() {
 #   None
 # Returns:
 #   0: the remote was added successfully
-#   1: the repository does not have a remote origin URL
-#   255: not run within a git repository
+#   1: the repository didn't have a remote origin URL
+#   255: wasn't run within a git repository
 function git::readd_remote() {
     if ! git::is_repo; then
         return 255
@@ -231,7 +231,7 @@ function git::readd_remote() {
 #   None
 # Returns:
 #   0: the identities were read into environment variables
-#   255: jq is not installed
+#   255: jq was not installed
 function git::read_identities() {
     if ! home::app_is_installed jq; then
         return 255

@@ -43,8 +43,8 @@ function keychain::load_exclusions() {
 # Arguments:
 #   $1: a key to check; must only be the file name
 # Returns:
-#   0: the key is to be excluded or doesn't exist or $1 is empty
-#   1: the key is not excluded
+#   0: the key was to be excluded or didn't exist, or $1 is empty
+#   1: the key was not excluded
 function keychain::is_excluded() {
     if [ -z "$1" ]; then
         echo "Error: \$1 is empty." >&2
@@ -69,7 +69,7 @@ function keychain::is_excluded() {
 #   None
 # Returns:
 #   0: the keys were loaded into keychain
-#   255: keychain is not installed
+#   255: keychain was not installed
 function keychain::load_keys() {
     if ! home::app_is_installed keychain; then
         return 255
