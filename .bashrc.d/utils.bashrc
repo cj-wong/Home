@@ -41,6 +41,23 @@ function utils::copy_tmp() {
     echo "Copied ${1} to ${tmp}." >&2
 }
 
+# Change directory to one that matches today's date.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   0: the current directory could be changed to one with the current date
+#   1: the directory could not be changed; the directory may not exist or
+#      the user has insufficient permissions to enter it
+function utils::cd_today() {
+    if cd "$(date +"%Y-%m-%d")"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Make a directory given today's date relative to current directory.
 # Globals:
 #   None
@@ -48,6 +65,8 @@ function utils::copy_tmp() {
 #   None
 # Returns:
 #   0: the directory could be created successfully
+#   1: the directory could not be created; the directory exists or another
+#      error has prevented the creation of the directory
 function utils::mkdir_today() {
     if mkdir "$(date +"%Y-%m-%d")"; then
         return 0
