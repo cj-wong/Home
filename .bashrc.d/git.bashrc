@@ -3,7 +3,7 @@
 #
 # Functions (helper and shortcuts) for git
 
-# Checks whether the working directory is a git repository.
+# Check whether the working directory is a git repository.
 # Globals:
 #   None
 # Arguments:
@@ -20,7 +20,7 @@ function git::is_repo() {
     fi
 }
 
-# Changes ssh key used for git.
+# Change ssh key used for git.
 # Globals:
 #   None
 # Arguments:

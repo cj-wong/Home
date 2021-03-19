@@ -3,7 +3,7 @@
 #
 # Utilities for Windows Subsystem for Linux
 
-# Sets the DISPLAY variable in WSL2 for GUI apps on Windows.
+# Set the DISPLAY variable in WSL2 for GUI apps on Windows.
 # Globals:
 #   DISPLAY: the display to connect for GUI apps
 # Arguments:

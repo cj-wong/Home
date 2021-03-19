@@ -5,7 +5,7 @@
 #
 # Error messages in this module _should_ include the name of the function.
 
-# Copies a file or directory to a temporary location.
+# Copy a file or directory to a temporary location.
 # Globals:
 #   None
 # Arguments:
@@ -75,7 +75,7 @@ function utils::today::mkdir() {
     fi
 }
 
-# Gets line-by-line of running processes matching arguments.
+# Get line-by-line of running processes matching arguments.
 # Globals:
 #   None
 # Arguments:
