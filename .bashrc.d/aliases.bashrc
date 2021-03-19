@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/false
+# shellcheck shell=bash
 #
 # Bash aliases
 
