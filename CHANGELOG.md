@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - [0.bashrc], [_aliases_and_vars.bashrc], and [_utils.bashrc] will be unconditionally enabled.
     - **To enable this system, change `.bashrc` to match the new code inside `INSTALL_BLOCK` in [install.sh].**
 - Added an example/template module that all new modules onward should use for reference: [__new.bashrc.enabled].
+- Added an alias to [_aliases_and_vars.bashrc] that creates a limited user to use for isolating programs.
 
 ### Changed
 - In [_aliases_and_vars.bashrc]:
