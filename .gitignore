@@ -2,3 +2,4 @@
 *.sublime-*
 
 # Project-specific files
+test.sh
