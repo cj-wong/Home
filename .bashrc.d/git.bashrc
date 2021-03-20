@@ -1,9 +1,10 @@
 #!/bin/false
 # shellcheck shell=bash
 #
-# Functions (helper and shortcuts) for git
+# git utilities
 
 # Check whether the working directory is a git repository.
+#
 # Globals:
 #   None
 # Arguments:

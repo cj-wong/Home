@@ -6,8 +6,10 @@
 #   1: normal installation aborted
 #   2: partial installation aborted (.bashrc.d code block in .bashrc)
 
-# Checks whether a file should be excluded from linking by checking
-# contents of the project .gitignore.
+# Checks whether a file should be excluded from linking.
+#
+# Specifically, checks whether a file matches a file or pattern in .gitignore.
+#
 # Globals:
 #   EXCLUDE_GITIGNORE: an array of patterns in .gitignore; this array is only
 #       populated in the middle of this script so the function should not be

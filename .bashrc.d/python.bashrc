@@ -49,3 +49,5 @@ function python::pip::install_here() {
         return 2
     fi
 }
+
+# Module-level code

@@ -4,6 +4,7 @@
 # Helper functions for scanimage.
 
 # Load default arguments from scanimage/arguments/arguments.json.
+#
 # Globals:
 #   None
 # Arguments:
@@ -33,7 +34,9 @@ function scanimage::load_default_args() {
 }
 
 # Scan many images until terminated with SIGINT (Ctrl-C).
+#
 # SIGINT is caught by `trap` and will return 0 rather than 130.
+#
 # Globals:
 #   None
 # Arguments:
@@ -74,6 +77,8 @@ function scanimage::scan_many() {
         ((file_number++))
     done
 }
+
+# Module-level code
 
 if ! home::app_is_installed scanimage; then
     echo "Install scanimage for scanning helper functions." >&2

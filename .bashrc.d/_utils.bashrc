@@ -1,11 +1,14 @@
 #!/bin/false
 # shellcheck shell=bash
 #
-# Utility functions and settings
+# General utility functions.
 #
 # Error messages in this module _should_ include the name of the function.
+#
+# This module will be unconditionally sourced. It does not need to be enabled.
 
 # Copy a file or directory to a temporary location.
+#
 # Globals:
 #   None
 # Arguments:
@@ -42,6 +45,7 @@ function utils::copy_tmp() {
 }
 
 # Change directory to one that matches today's date.
+#
 # Globals:
 #   None
 # Arguments:
@@ -59,6 +63,7 @@ function utils::today::cd() {
 }
 
 # Make a directory given today's date relative to current directory.
+#
 # Globals:
 #   None
 # Arguments:
@@ -76,6 +81,7 @@ function utils::today::mkdir() {
 }
 
 # Get line-by-line of running processes matching arguments.
+#
 # Globals:
 #   None
 # Arguments:

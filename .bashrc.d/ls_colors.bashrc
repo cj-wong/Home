@@ -10,6 +10,7 @@
 #   https://github.com/trapd00r/LS_COLORS
 
 # Source lscolors.sh.
+#
 # Globals:
 #   None
 # Arguments:
@@ -20,7 +21,10 @@ function lscolors::source() {
     . "${HOME}/.local/share/lscolors.sh"
 }
 
-# Download LS_COLORS anew. May fail if $LSC_REPO_HOME already exists.
+# Download LS_COLORS anew.
+#
+# May fail if $LSC_REPO_HOME already exists.
+#
 # Globals:
 #   None
 # Arguments:
@@ -33,6 +37,7 @@ function lscolors::download() {
 }
 
 # Install LS_COLORS and call lscolors::source.
+#
 # Globals:
 #   None
 # Arguments:
@@ -59,6 +64,7 @@ function lscolors::install() {
 }
 
 # Ask to reinstall LS_COLORS, and reinstall if accepted.
+#
 # Globals:
 #   None
 # Arguments:
@@ -78,7 +84,8 @@ function lscolors::reinstall() {
     fi
 }
 
-# Update the LS_COLORS local git repository and install new file
+# Update the LS_COLORS local git repository and install new file.
+#
 # Globals:
 #   None
 # Arguments:
@@ -116,7 +123,9 @@ function lscolors::update() {
 }
 
 # Ask to remove existing LS_COLORS directory, and delete if accepted.
+#
 # Ask twice to be sure about deletion.
+#
 # Globals:
 #   None
 # Arguments:

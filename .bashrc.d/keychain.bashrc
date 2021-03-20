@@ -11,7 +11,9 @@
 #   https://www.funtoo.org/Keychain
 
 # Load list of keys to exclude from .bashrc.d/keychain/exclusions.txt.
+#
 # Only list file names, not fully qualified paths.
+#
 # Globals:
 #   KEYCHAIN_EXCLUDES: an array containing names of excluded SSH keys;
 #`      can be empty
@@ -37,6 +39,7 @@ function keychain::load_exclusions() {
 }
 
 # Check whether a SSH key was excluded for use in keychain.
+#
 # Globals:
 #   KEYCHAIN_EXCLUDES: an array containing names of excluded SSH keys;
 #`      can be empty
@@ -63,6 +66,7 @@ function keychain::is_excluded() {
 }
 
 # Load the keys and check whether they are excluded.
+#
 # Globals:
 #   None
 # Arguments:
