@@ -14,6 +14,8 @@
 #       called on its own elsewhere
 # Arguments:
 #   $1: the file to check
+# Outputs:
+#   Name of a file or pattern in .gitignore if $1 matches it
 # Returns:
 #   0: the file was to be ignored and not linked
 #   1: the file was able to be safely linked
@@ -34,17 +36,16 @@ function is_file_gitignored() {
 
 
 REPO_DIR=$(dirname "$0")
-LAST_DIR=$(pwd)
 
 echo "Installation for Home will begin."
 echo "Note that while some external programs are necessary for some modules,"
 echo "only git is required for the project as a whole. Install git when needed."
 echo
-echo "Moving into ${REPO_DIR} ..."
 
 echo "Changing repository directory permissions to 700..."
 chmod 700 "$REPO_DIR"
 
+echo "Moving into ${REPO_DIR} ..."
 pushd "$REPO_DIR" > /dev/null \
     || (echo "Could not go into ${REPO_DIR}. Aborting." && exit 1)
 REPO_DIR=$(pwd)
