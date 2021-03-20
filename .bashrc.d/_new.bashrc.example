@@ -1,0 +1,18 @@
+#!/bin/false
+# shellcheck shell=bash
+#
+# New module template for .bashrc.d.
+
+# Module-level code
+
+if ! home::module_is_enabled basename --suffix=.bashrc "${BASH_SOURCE[0]}"; then
+    # The module is disabled. Silently skip it.
+    :
+elif ! home::app_is_installed DEP; then
+    # If a dependency is necessary, check here.
+    echo "Install DEP to DO_SOMETHING_REASON." >&2
+else
+    # The module is enabled and dependencies are present; run module-level code
+    # below.
+    :
+fi
