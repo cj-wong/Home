@@ -3,9 +3,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.0] - 2021-03-19
+### Added
+- Added [python.bashrc] for *Python* language utilities: the first utility installs *PyPI* packages from a `requirements.txt` in the current directory.
+- Added a system to selectively enable modules, by creating a file `enabled.txt` in [.bashrc.d/0/modules/](.bashrc.d/0/modules/).
+    - [0.bashrc], [_aliases_and_vars.bashrc], and [_utils.bashrc] will be unconditionally enabled.
+    - **To enable this system, change `.bashrc` to match the new code inside `INSTALL_BLOCK` in [install.sh].**
+- Added an example/template module that all new modules onward should use for reference: [__new.bashrc.enabled].
+
+### Changed
+- In [_aliases_and_vars.bashrc]:
+    - Moved `.bash_aliases` to [_aliases_and_vars.bashrc]. This could be considered a breaking change, as it will invalidate existing installs' `.bash_aliases` sym-link, but since it will be sourced from [.bashrc.d], functionality should be the same.
+    - Merged contents of `path.bashrc` to this file. Because `$PATH` is an environment variable and the two modules served very similar purposes, it made sense to keep them in one file only.
+    - Similarly, merged contents of `prompt.bashrc` into this file.
+    - `$PATH` is only modified when `~/.local/bin` isn't already present.
+- 
+
 ## [0.5.0] - 2021-01-30
 ### Added
-- Added a new function `utils::today::mkdir()` in [utils.bashrc] that creates a directory relative to the current directory named after the day's date in the format `%Y-%m-%d`.
+- Added a new function `utils::today::mkdir()` in [_utils.bashrc] that creates a directory relative to the current directory named after the day's date in the format `%Y-%m-%d`.
 - Added a new function counterpart to the aforementioned function, `utils::today::cd()`, which attempts to change current directory to one matching the day's date.
 - Added new module [scanimage.bashrc] for helper functions for `scanimage` scanning.
     - To add default arguments to use for `scanimage`, create a file `arguments.json` in [.bashrc.d/scanimage/arguments/](.bashrc.d/scanimage/arguments/).
@@ -35,10 +51,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added note in [install.sh] that `git` is a required command, in case Home was downloaded instead of cloned.
 
 ### Changed
-- Moved `psgrep()` and renamed to `utils::psgrep()` in [.bash_aliases] to [utils.bashrc], as `psgrep()` is not an alias.
+- Moved `psgrep()` and renamed to `utils::psgrep()` in [.bash_aliases] to [_utils.bashrc], as `psgrep()` is not an alias.
 - Error messages, instead of saying `Aborting $function`, will now be prefaced with `Error:`. However, some messages routed through `stderr` may not be errors. For instance, a user responding `no` to a prompt will cancel the function/script (and send the message to `stderr`), but the message is not an error.
     - Likewise, in module-level `.bashrc` code, some messages will not be errors when functionality is optional. For instance, [keychain.bashrc] will warn users if the session isn't through SSH and `keychain` isn't installed. However in SSH sessions, it will let the user know that `keychain` will not run (so, an error).
-    - Care should be taken when considering functions called by other functions: the error message *should* reference the function name of the function that encountered an error. For example, [utils.bashrc] functions should follow this rule, since other functions may call those utility functions.
+    - Care should be taken when considering functions called by other functions: the error message *should* reference the function name of the function that encountered an error. For example, [_utils.bashrc] functions should follow this rule, since other functions may call those utility functions.
 
 ### Fixed
 - Added missing conditional to `lscolors::update`. Previously, if the directory didn't exist, the function would return 0 and not tell the user the directory was absent.
@@ -74,7 +90,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.3.4] - 2020-11-14
 ### Changed
-- Functions in [.bashrc.d](.bashrc.d) are now prefaced with their file name stem (e.g. `git::is_repo` from `git_is_repo`). This change was made in reference to [the Google Style Guide for Shell](https://google.github.io/styleguide/shellguide.html).
+- Functions in [.bashrc.d] are now prefaced with their file name stem (e.g. `git::is_repo` from `git_is_repo`). This change was made in reference to the [Google Style Guide for Shell].
 - Error statements are now sent to stderr.
 - Multiple files have been modified to reduce namespace pollution:
     - Added multiple functions across multiple files to organize the modules.
@@ -86,7 +102,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - In [git.bashrc], `git_readd_origin()` is a new function that adds a repository's remote origin URL to `set-url` for simultaneous pushes. This function is a complement to `git_add_origin()`.
 
 ### Changed
-- In [.bash_aliases](.bash_aliases), two existing aliases (`ll`, `la`) will use the new `lh` (equivalent to `ls -h`) for human-readable file sizes.
+- In [.bash_aliases], two existing aliases (`ll`, `la`) will use the new `lh` (equivalent to `ls -h`) for human-readable file sizes.
 - Also in `.bash_aliases`, aliases are rearranged by base command.
 - Furthermore, the `egrep` and `fgrep` aliases are no longer redundant (e.g. `alias egrep='egrep --color=auto'`) since `grep` is already aliased to `grep --color=auto` and the extended flags of `grep` (e.g. `-E`, for `egrep`) are recommended over the implied form (`egrep` vs `grep -E`).
 - In [git.bashrc] and the case of no prior remote origin for `git_add_origin()`, the function will automatically also add the same origin to `set-url`.
@@ -103,12 +119,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Syntax is now linted with `shellcheck`.
 
 ### Fixed
-- `copy_tmp()` from [utils.bashrc] was not being loaded correctly in [install.sh]. The install script now makes sure to source the utils file.
+- `copy_tmp()` from [_utils.bashrc] was not being loaded correctly in [install.sh]. The install script now makes sure to source the utils file.
 - Switched from `whereis` to `command -v`, because `whereis` returns 0 even with nothing is found.
 
 ## [0.3.0] - 2020-10-18
 ### Added
-- Added [Windows Subsystem for Linux](.bashrc.d/wsl.bashrc) utilities
+- Added [wsl.bashrc] utilities for *Windows Subsystem for Linux*
 - Added a way to exclude SSH key from being added to `keychain`. Create a text file in [here](.bashrc.d/keychain) named `exclusions.txt` and put one file name (not fully qualified path) per line.
 
 ### Changed
@@ -152,12 +168,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Initial version, based on my Pixelbook setup.
 
-[.bash_aliases]: .bash_aliases
+[Google Style Guide for Shell]: https://google.github.io/styleguide/shellguide.html
+[.bash_aliases]: .bashrc.d/aliases.bashrc
 [.bashrc.d]: .bashrc.d
 [install.sh]: install.sh
 [0.bashrc]: .bashrc.d/0.bashrc
+[__new.bashrc.example]: .bashrc.d/__new.bashrc.example
+[_aliases_and_vars.bashrc]: .bashrc.d/_aliases_and_vars.bashrc
+[_utils.bashrc]: .bashrc.d/_utils.bashrc
 [git.bashrc]: .bashrc.d/git.bashrc
 [keychain.bashrc]: .bashrc.d/keychain.bashrc
 [ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
+[python.bashrc]: .bashrc.d/python.bashrc
 [scanimage.bashrc]: .bashrc.d/scanimage.bashrc
-[utils.bashrc]: .bashrc.d/utils.bashrc
+[wsl.bashrc]: .bashrc.d/wsl.bashrc
