@@ -53,8 +53,16 @@ REPO_DIR=$(pwd)
 INSTALL_BLOCK=$(cat <<END
 if [ -d ~/.bashrc.d ]; then
     for file in ~/.bashrc.d/*.bashrc; do
-        if [[ \$file != */keychain.bashrc ]]; then
-            . "\$file"
+        base_file=\$(basename --suffix=.bashrc "\$file")
+        if [[ \$base_file != "keychain" ]]; then
+            if [[ \$base_file == "0" ]]; then
+                . "\$file"
+            elif home::module_is_enabled "\$base_file"; then
+                . "\$file"
+            else
+                # Silently ignore disabled modules.
+                :
+            fi
         fi
     done
 
@@ -71,7 +79,7 @@ END
 
 # If copy_tmp isn't available, source it from the utils file.
 if ! type -t "utils::copy_tmp" > /dev/null 2>&1; then
-    . "${REPO_DIR}/.bashrc.d/utils.bashrc"
+    . "${REPO_DIR}/.bashrc.d/_utils.bashrc"
 fi
 
 if [[ $(< "${HOME}/.bashrc") != *"$INSTALL_BLOCK"* ]]; then
