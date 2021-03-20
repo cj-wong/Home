@@ -48,7 +48,7 @@ function scanimage::scan_many() {
     local prompt
 
     if [[ "$*" ]]; then
-        echo "Overriding default arguments with $*."
+        echo "Overriding default arguments with $*." >&2
         args=( "$@" )
     elif ! scanimage::load_default_args; then
         echo "No arguments will be applied to scanimage." >&2
@@ -68,7 +68,7 @@ function scanimage::scan_many() {
         done
         unset prompt
         if ! scanimage "${args[@]}" > "${file_number}.pnm"; then
-            echo "Could not run scanimage...exiting."
+            echo "Could not run scanimage...exiting." >&2
             return 1
         fi
         ((file_number++))

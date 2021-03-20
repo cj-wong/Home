@@ -139,7 +139,7 @@ function lscolors::delete() {
     echo "Are you sure you really want to delete ${LSC_REPO_HOME}?" >&2
     read -r -p "[yN] " answer
     if [[ $answer =~ ^[yY] ]]; then
-        echo "Removing ${LSC_REPO_HOME}."
+        echo "Removing ${LSC_REPO_HOME}." >&2
         rm --recursive --force "$LSC_REPO_HOME"
     else
         echo "Deletion has been aborted." >&2
