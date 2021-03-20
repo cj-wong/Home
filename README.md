@@ -72,3 +72,4 @@ See [LICENSE](LICENSE) for more detail.
 [keychain.bashrc]: .bashrc.d/keychain.bashrc
 [ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
 [scanimage.bashrc]: .bashrc.d/scanimage.bashrc
+[wsl.bashrc]: .bashrc.d/wsl.bashrc
