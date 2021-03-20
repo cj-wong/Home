@@ -35,13 +35,18 @@ Most, if not all, of the functions sourced from each module are prefixed with a 
 
 ## Requirements
 
-Currently, `git` is required for Home, because it is used in multiple modules (especially [git.bashrc]).
+Currently, `git` is required for Home, because it is used in multiple modules (especially [git.bashrc]). `git` should be already installed by default on Linux systems. It may not be necessary for most modules, but it will help keep the modules up-to-date with versioning anyway.
 
 - `git`
-    - [git.bashrc] \(only some functions will work)
+    - [git.bashrc] \(not all functions will work without `jq`)
     - [ls_colors.bashrc]
 - `jq`
-    - 
+    - [git.bashrc] \(identity management)
+    - [scanimage.bashrc] \(default scan options)
+- `keychain`
+    - [keychain.bashrc]
+- `wsl.exe` (special case)
+    - [wsl.bashrc]
 
 ## Disclaimer
 
@@ -64,4 +69,6 @@ See [LICENSE](LICENSE) for more detail.
 [install.sh]: install.sh
 [_utils.bashrc]: .bashrc.d/_utils.bashrc
 [git.bashrc]: .bashrc.d/git.bashrc
+[keychain.bashrc]: .bashrc.d/keychain.bashrc
 [ls_colors.bashrc]: .bashrc.d/ls_colors.bashrc
+[scanimage.bashrc]: .bashrc.d/scanimage.bashrc
