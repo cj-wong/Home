@@ -1,7 +1,10 @@
 #!/bin/false
 # shellcheck shell=bash
 #
-# Bash aliases
+# Bash alias and environment variable manipulation.
+# This module will be unconditionally sourced. It does not need to be enabled.
+
+# Aliases
 
 # color output
 alias ls='ls --color=auto'
@@ -27,3 +30,13 @@ alias xgrep="egrep --exclude-dir={.git,venv,__pycache__}"
 alias mdgrep="xgrep -r --include='*.md'"
 alias pygrep="xgrep -r --include='*.py'"
 alias shgrep="xgrep -r --include='*.sh' --include='*.bashrc'"
+
+# Environment variables
+
+if [ -d ~/.local/bin ]; then
+    if [[ $PATH != *"$HOME/.local/bin"* ]]; then
+        # Only add to PATH if ~/.local/bin isn't already present.
+        PATH="$PATH:$HOME/.local/bin"
+        export PATH
+    fi
+fi
