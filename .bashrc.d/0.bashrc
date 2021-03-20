@@ -6,6 +6,7 @@
 # checks.
 
 # Check whether an app (program) is installed.
+#
 # Globals:
 #   None
 # Arguments:
@@ -20,4 +21,61 @@ function home::app_is_installed() {
         echo "Error: ${1} is not installed." >&2
         return 1
     fi
+}
+
+# Load enabled modules for .bashrc.d.
+#
+# 0.bashrc and aliases.bashrc will always be included, even if not listed
+# in the file; other modules must be manually enabled.
+# Each entry in modules/enabled.txt should not include the .bashrc extension.
+#
+# Globals:
+#   HOME_MODULES: an array containing names of enabled .bashrc.d modules;
+#`      can be empty
+# Arguments:
+#   None
+# Returns:
+#   0: the key exclude list was loaded and exported successfully
+function home::load_enabled_modules() {
+    echo "Loading modules to be enabled..." >&2
+    local enabled_list
+    enabled_list="${HOME}/.bashrc.d/0/modules/enabled.txt"
+
+    HOME_MODULES=( )
+
+    if [ -f "$enabled_list" ]; then
+        while read -r enabled; do
+            HOME_MODULES+=("$enabled")
+        done < "$enabled_list"
+    fi
+
+    export HOME_MODULES
+    echo "Module list has been loaded." >&2
+}
+
+# Check whether a .bashrc.d module is enabled.
+#
+# Globals:
+#   HOME_MODULES: an array containing names of excluded SSH keys;
+#`      can be empty
+# Arguments:
+#   $1: a module to check; must only be the file name without .bashrc extension
+# Returns:
+#   0: the module was enabled
+#   1: the module was not enabled
+#   2: $1 is empty
+function home::module_is_enabled() {
+    if [ -z "$1" ]; then
+        echo "Error: \$1 is empty." >&2
+        return 2
+    fi
+
+    local module
+    for module in "${HOME_MODULES[@]}"; do
+        if [[ "$module" == "$1" ]]; then
+            return 0
+        fi
+    done
+
+    return 1
 }
