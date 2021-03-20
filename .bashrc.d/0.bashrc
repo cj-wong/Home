@@ -2,8 +2,11 @@
 # shellcheck shell=bash
 #
 # The first module to be sourced from .bashrc.d.
-# This module contains shared configuration between modules and first-run 
+#
+# This module contains shared configuration between modules and first-run
 # checks.
+#
+# This module will be unconditionally sourced. It does not need to be enabled.
 
 # Check whether an app (program) is installed.
 #
@@ -25,8 +28,13 @@ function home::app_is_installed() {
 
 # Load enabled modules for .bashrc.d.
 #
-# 0.bashrc and aliases.bashrc will always be included, even if not listed
-# in the file; other modules must be manually enabled.
+# The following modules are unconditionally enabled:
+# - 0.bashrc (this file)
+# - _aliases_and_vars.bashrc
+# - _utils.bashrc
+#
+# All other modules must be manually enabled in the file.
+#
 # Each entry in modules/enabled.txt should not include the .bashrc extension.
 #
 # Globals:
@@ -50,7 +58,7 @@ function home::load_enabled_modules() {
     fi
 
     export HOME_MODULES
-    echo "Module list has been loaded." >&2
+    echo "Modules to be enabled: ${HOME_MODULES[*]}" >&2
 }
 
 # Check whether a .bashrc.d module is enabled.
@@ -70,6 +78,10 @@ function home::module_is_enabled() {
         return 2
     fi
 
+    if [[ "$1" == "_aliases_and_vars" || "$1" == "_utils" ]]; then
+        return 0
+    fi
+
     local module
     for module in "${HOME_MODULES[@]}"; do
         if [[ "$module" == "$1" ]]; then
@@ -79,3 +91,7 @@ function home::module_is_enabled() {
 
     return 1
 }
+
+# Module-level code
+
+home::load_enabled_modules
