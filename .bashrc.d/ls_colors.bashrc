@@ -167,7 +167,8 @@ else
     # LS_COLORS depends on ~/.local/share existing.
     mkdir --parents "${HOME}/.local/share"
     if [ -d "$LSC_REPO_HOME" ]; then
-        echo "LS_COLORS already exists but doesn't seem to be installed."
+        echo "[ls_colors.bashrc]" \
+             "LS_COLORS already exists but doesn't seem to be installed."
         if lscolors::delete; then
             lscolors::download && lscolors::install
         elif lscolors::reinstall; then

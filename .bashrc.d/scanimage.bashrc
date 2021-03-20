@@ -81,5 +81,6 @@ function scanimage::scan_many() {
 # Module-level code
 
 if ! home::app_is_installed scanimage; then
-    echo "Install scanimage for scanning helper functions." >&2
+    echo "[scanimage.bashrc]" \
+         " Install scanimage for scanning helper functions." >&2
 fi

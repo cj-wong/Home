@@ -281,11 +281,12 @@ GIT_ID_SH="${GIT_ID_DIR}/identities.sh"
 GIT_ID_FILE="${GIT_ID_DIR}/identities.json"
 
 if ! home::app_is_installed jq; then
-    echo "Install jq to enable identity management." >&2
+    echo "[git.bashrc] Install jq to enable identity management." >&2
 elif [ ! -f "$GIT_ID_FILE" ]; then
-    echo "identities.json doesn't exist in ${GIT_ID_DIR}." >&2
+    echo "[git.bashrc] identities.json doesn't exist in ${GIT_ID_DIR}." >&2
     echo "Create it to enable identity management." >&2
 else
+    echo "[git.bashrc] Loading identities..."
     git::read_identities > /dev/null
     . "$GIT_ID_SH" && export IDENTITIES
 fi

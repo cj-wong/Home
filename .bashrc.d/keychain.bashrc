@@ -78,7 +78,7 @@ function keychain::load_keys() {
     if ! home::app_is_installed keychain; then
         return 255
     fi
-    echo "Loading keys from ~/.ssh..." >&2
+    echo "[keychain.bashrc] Loading keys from ~/.ssh..." >&2
     local keys
     keys=( )
 
@@ -104,9 +104,9 @@ function keychain::load_keys() {
 # Module-level code
 
 if [ -n "$SSH_CLIENT" ]; then
-    echo "Error: keychain will not start in SSH sessions." >&2
+    echo "[keychain.bashrc] Error: keychain will not start in SSH sessions." >&2
 elif ! home::app_is_installed keychain; then
-    echo "Warning: keychain is not installed." >&2
+    echo "[keychain.bashrc] Warning: keychain is not installed." >&2
 else
     keychain::load_keys
 fi

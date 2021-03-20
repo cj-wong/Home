@@ -12,7 +12,7 @@
 # Returns:
 #   0: display was successfully exported
 function wsl2::display() {
-    echo "Setting DISPLAY for WSL2..." >&2
+    echo "[wsl.bashrc] Setting DISPLAY for WSL2..." >&2
     # Sets $DISPLAY for WSL GUI apps
     # Adapted from:
     #   https://techcommunity.microsoft.com/t5
