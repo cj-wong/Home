@@ -41,7 +41,7 @@ function python::pip::install_here() {
         return 1
     fi
 
-    if . "$env"; then
+    if . "$activate"; then
         pip install -r requirements.txt
         return 0
     else

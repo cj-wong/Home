@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.1] - 2021-03-26
+### Fixed
+- In [python.bashrc]: Fixed wrong source target.
+
 ## [1.0.0] - 2021-03-19
 ### Added
 - Added [python.bashrc] for *Python* language utilities: the first utility installs *PyPI* packages from a `requirements.txt` in the current directory.
