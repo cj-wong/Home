@@ -43,6 +43,7 @@ function python::pip::install_here() {
 
     if . "$activate"; then
         pip install -r requirements.txt
+        deactivate
         return 0
     else
         echo "Could not source activation script. Exiting..." >&2
