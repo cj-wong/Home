@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.2] - 2021-04-03
+### Fixed
+- In [git.bashrc]: fixed parameter substitution of `+x` in `[ -z "${matched_name+x}" ]` to `:+x`; this checks both whether `$matched_name` is empty and whether `$matched_name` was declared. Specifically, in the old syntax, if `$matched_name` was empty but declared, it would be substituted with `x`. In the new syntax, the substitution only takes place if `$matched_name` is empty (regardless of declaration).
+
+### Changed
+- In [python.bashrc]: `python::pip::install_here()` now deactivates the environment after successful `pip` requirements installation.
+
 ## [1.0.1] - 2021-03-26
 ### Fixed
 - In [python.bashrc]: Fixed wrong source target.
