@@ -143,7 +143,7 @@ function git::specify_identity() {
         fi
     done
 
-    if [ -z "${matched_name+x}" ]; then
+    if [ -z "${matched_name:+x}" ]; then
         echo "Could not match any identities." >&2
         return 3
     fi
