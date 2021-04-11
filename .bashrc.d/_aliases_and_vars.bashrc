@@ -92,7 +92,7 @@ alias shgrep="xgrep -r --include='*.sh' --include='*.bashrc'"
 
 # adduser
 alias adduser_limited='
-    adduser --disabled-password --disabled-login --gecos ""'
+    sudo adduser --disabled-password --disabled-login --gecos ""'
 
 # Environment variables
 
