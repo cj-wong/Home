@@ -95,3 +95,4 @@ function home::module_is_enabled() {
 # Module-level code
 
 home::load_enabled_modules
+umask 027
