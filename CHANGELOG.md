@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.3] - 2021-04-10
+### Changed
+- Enforced `umask` of `027`.
+
+### Fixed
+- Prepended `adduser_limited` with `sudo` in [_aliases_and_vars.bashrc] to bypass aliases not being passed to `sudo`.
+
 ## [1.0.2] - 2021-04-03
 ### Fixed
 - In [git.bashrc]: fixed parameter substitution of `+x` in `[ -z "${matched_name+x}" ]` to `:+x`; this checks both whether `$matched_name` is empty and whether `$matched_name` was declared. Specifically, in the old syntax, if `$matched_name` was empty but declared, it would be substituted with `x`. In the new syntax, the substitution only takes place if `$matched_name` is empty (regardless of declaration).
